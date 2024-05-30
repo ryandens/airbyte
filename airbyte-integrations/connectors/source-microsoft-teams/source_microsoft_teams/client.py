@@ -240,7 +240,7 @@ class Client:
         period = self.configs["period"]
         api_url = self._get_api_url(f"reports/getTeamsDeviceUsageUserDetail(period='{period}')")
         csv_response = io.BytesIO(self._make_request(api_url))
-        csv_response.readline()
+        csv_response.readline(5_000_000)
         with io.TextIOWrapper(csv_response, encoding="utf-8-sig") as text_file:
             field_names = [
                 "report_refresh_date",
