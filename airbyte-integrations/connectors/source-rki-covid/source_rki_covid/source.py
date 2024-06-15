@@ -11,6 +11,7 @@ import requests
 from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import Stream
 from airbyte_cdk.sources.streams.http import HttpStream
+from security import safe_requests
 
 
 # Basic full refresh stream
@@ -600,7 +601,7 @@ class SourceRkiCovid(AbstractSource):
         :return Tuple[bool, any]: (True, None) if the input config can be used to connect to the API successfully, (False, error) otherwise.
         """
         try:
-            req = requests.get(RkiCovidStream.url_base + "germany")
+            req = safe_requests.get(RkiCovidStream.url_base + "germany")
             if req.status_code == 200:
                 return True, None
             return False, req.reason

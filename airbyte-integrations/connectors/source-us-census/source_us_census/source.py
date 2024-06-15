@@ -13,6 +13,7 @@ from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.auth import NoAuth
+from security import safe_requests
 
 
 def prepare_request_params(query_params: str, api_key: str) -> dict:
@@ -188,7 +189,7 @@ class SourceUsCensus(AbstractSource):
                 config.get("query_params"),
                 config.get("api_key"),
             )
-            resp = requests.get(f"{UsCensusStream.url_base}{config.get('query_path')}", params=params)
+            resp = safe_requests.get(f"{UsCensusStream.url_base}{config.get('query_path')}", params=params)
             status = resp.status_code
             logger.info(f"Ping response code: {status}")
 

@@ -53,6 +53,7 @@ from .streams import (
     PinterestStream,
     UserAccountAnalytics,
 )
+from security import safe_requests
 
 logger = logging.getLogger("airbyte")
 
@@ -107,7 +108,7 @@ class SourcePinterest(AbstractSource):
         url = f"{PinterestStream.url_base}user_account"
         try:
             auth_headers = {"Accept": "application/json", **authenticator.get_auth_header()}
-            session = requests.get(url, headers=auth_headers)
+            session = safe_requests.get(url, headers=auth_headers)
             session.raise_for_status()
             return True, None
         except requests.exceptions.HTTPError as e:

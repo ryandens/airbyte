@@ -15,6 +15,7 @@ from airbyte_cdk.sources.streams import Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 
 from .utils import datetime_to_string, delete_milliseconds, get_api_endpoint, get_start_date, initialize_authenticator
+from security import safe_requests
 
 
 class OktaStream(HttpStream, ABC):
@@ -347,8 +348,7 @@ class SourceOkta(AbstractSource):
             api_endpoint = get_api_endpoint(config)
             url = parse.urljoin(api_endpoint, "users")
 
-            response = requests.get(
-                url,
+            response = safe_requests.get(url,
                 params={"limit": 1},
                 headers=auth.get_auth_header(),
             )

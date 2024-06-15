@@ -15,6 +15,7 @@ from airbyte_cdk.sources.streams.http.requests_native_auth import TokenAuthentic
 from pendulum.parsing.exceptions import ParserError
 
 from .streams import Blocks, Comments, Databases, Pages, Users
+from security import safe_requests
 
 
 class SourceNotion(AbstractSource):
@@ -76,7 +77,7 @@ class SourceNotion(AbstractSource):
             # Endpoint docs: https://developers.notion.com/reference/get-self
             ping_endpoint = "https://api.notion.com/v1/users/me"
             notion_version = {"Notion-Version": "2022-06-28"}
-            response = requests.get(ping_endpoint, auth=authenticator, headers=notion_version)
+            response = safe_requests.get(ping_endpoint, auth=authenticator, headers=notion_version)
 
             if response.status_code == 200:
                 return True, None

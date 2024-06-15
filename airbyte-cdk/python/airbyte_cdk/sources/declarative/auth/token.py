@@ -14,6 +14,7 @@ from airbyte_cdk.sources.declarative.interpolation.interpolated_string import In
 from airbyte_cdk.sources.declarative.requesters.request_option import RequestOption, RequestOptionType
 from airbyte_cdk.sources.declarative.types import Config
 from cachetools import TTLCache, cached
+from security import safe_requests
 
 
 @dataclass
@@ -236,8 +237,7 @@ class LegacySessionTokenAuthenticator(DeclarativeAuthenticator):
 
     def is_valid_session_token(self) -> bool:
         try:
-            response = requests.get(
-                f"{self._api_url.eval(self.config)}{self._validate_session_url.eval(self.config)}",
+            response = safe_requests.get(f"{self._api_url.eval(self.config)}{self._validate_session_url.eval(self.config)}",
                 headers={self.auth_header: self._session_token.eval(self.config)},
             )
             response.raise_for_status()

@@ -15,6 +15,7 @@ from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 from dateutil.parser import parse
+from security import safe_requests
 
 item_keys = [
     "title",
@@ -142,7 +143,7 @@ class Items(IncrementalRssStream):
 class SourceRss(AbstractSource):
     def check_connection(self, logger, config) -> Tuple[bool, any]:
         try:
-            resp = requests.get(config.get("url"))
+            resp = safe_requests.get(config.get("url"))
             status = resp.status_code
             if status == 200:
                 return True, None

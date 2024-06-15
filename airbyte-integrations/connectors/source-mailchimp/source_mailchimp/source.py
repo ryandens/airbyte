@@ -30,6 +30,7 @@ from .streams import (
     Tags,
     Unsubscribes,
 )
+from security import safe_requests
 
 
 class MailChimpAuthenticator:
@@ -107,8 +108,7 @@ class SourceMailchimp(AbstractSource):
 
         try:
             authenticator = MailChimpAuthenticator().get_auth(config)
-            response = requests.get(
-                f"https://{authenticator.data_center}.api.mailchimp.com/3.0/ping", headers=authenticator.get_auth_header()
+            response = safe_requests.get(f"https://{authenticator.data_center}.api.mailchimp.com/3.0/ping", headers=authenticator.get_auth_header()
             )
 
             # A successful response will return a simple JSON object with a single key: health_status.

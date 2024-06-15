@@ -7,6 +7,7 @@ import time
 from typing import Optional
 
 import requests
+from security import safe_requests
 
 
 def get_docker_hub_auth_token() -> str:
@@ -46,7 +47,7 @@ def is_image_on_docker_hub(image_name: str, version: str, digest: Optional[str] 
 
     # Allow for retries as the DockerHub API is not always reliable with returning the latest publish.
     for _ in range(retries + 1):
-        response = requests.get(tag_url, headers=headers)
+        response = safe_requests.get(tag_url, headers=headers)
         if response.ok:
             break
         time.sleep(wait_sec)

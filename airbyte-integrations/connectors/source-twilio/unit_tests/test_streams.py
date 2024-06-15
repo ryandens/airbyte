@@ -7,7 +7,6 @@ from unittest.mock import patch
 
 import pendulum
 import pytest
-import requests
 from airbyte_cdk.sources.streams.http import HttpStream
 from freezegun import freeze_time
 from source_twilio.auth import HttpBasicAuthenticator
@@ -26,6 +25,7 @@ from source_twilio.streams import (
     UsageRecords,
     UsageTriggers,
 )
+from security import safe_requests
 
 TEST_CONFIG = {
     "account_sid": "airbyte.io",
@@ -96,7 +96,7 @@ class TestTwilioStream:
         stream = stream_cls(**self.CONFIG)
         url = f"{stream.url_base}{stream.path()}"
         requests_mock.get(url, json=test_response)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.next_page_token(response)
         assert result == expected
 
@@ -111,7 +111,7 @@ class TestTwilioStream:
           stream = stream_cls(**self.CONFIG)
           url = f"{stream.url_base}{stream.path()}"
           requests_mock.get(url, json=test_response)
-          response = requests.get(url)
+          response = safe_requests.get(url)
           result = list(stream.parse_response(response))
           assert result[0]['id'] == expected[0]['id']
 
@@ -126,7 +126,7 @@ class TestTwilioStream:
         url = f"{stream.url_base}{stream.path()}"
         test_headers = {"Retry-After": expected}
         requests_mock.get(url, headers=test_headers)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.backoff_time(response)
         assert result == float(expected)
 

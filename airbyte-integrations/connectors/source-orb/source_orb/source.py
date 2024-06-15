@@ -12,6 +12,7 @@ from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.requests_native_auth import TokenAuthenticator
+from security import safe_requests
 
 ORB_API_BASE_URL = "https://api.billwithorb.com/v1/"
 
@@ -698,7 +699,7 @@ class SourceOrb(AbstractSource):
         """
         auth_header = TokenAuthenticator(token=config["api_key"]).get_auth_header()
         ping_url = ORB_API_BASE_URL + "ping"
-        ping_response = requests.get(ping_url, headers=auth_header)
+        ping_response = safe_requests.get(ping_url, headers=auth_header)
         try:
             ping_response.raise_for_status()
             return True, None

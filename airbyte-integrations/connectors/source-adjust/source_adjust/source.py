@@ -13,6 +13,7 @@ from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import IncrementalMixin, Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.requests_native_auth import TokenAuthenticator
+from security import safe_requests
 
 
 class AdjustReportStream(HttpStream, IncrementalMixin):
@@ -182,8 +183,7 @@ class SourceAdjust(AbstractSource):
         :return: (True, None) on connecton to the API successfully,
                  (False, error) otherwise.
         """
-        requests.get(
-            url=self.check_endpoint,
+        safe_requests.get(url=self.check_endpoint,
             headers={"Authorization": f'Bearer {config["api_token"]:s}'},
         ).raise_for_status()
         return True, None  # Are we coding in go?

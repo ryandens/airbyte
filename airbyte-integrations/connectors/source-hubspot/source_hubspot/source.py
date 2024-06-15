@@ -6,8 +6,6 @@ import logging
 from http import HTTPStatus
 from itertools import chain
 from typing import Any, List, Mapping, Optional, Tuple
-
-import requests
 from airbyte_cdk.logger import AirbyteLogger
 from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import Stream
@@ -62,6 +60,7 @@ from source_hubspot.streams import (
     WebAnalyticsStream,
     Workflows,
 )
+from security import safe_requests
 
 
 class SourceHubspot(AbstractSource):
@@ -90,7 +89,7 @@ class SourceHubspot(AbstractSource):
         try:
             access_token = authenticator.get_access_token()
             url = f"https://api.hubapi.com/oauth/v1/access-tokens/{access_token}"
-            response = requests.get(url=url)
+            response = safe_requests.get(url=url)
             response.raise_for_status()
             response_json = response.json()
             granted_scopes = response_json["scopes"]

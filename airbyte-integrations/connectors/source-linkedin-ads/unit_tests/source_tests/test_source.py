@@ -6,7 +6,6 @@
 from unittest.mock import Mock, patch
 
 import pytest
-import requests
 from airbyte_cdk.sources.streams.http.requests_native_auth import Oauth2Authenticator, TokenAuthenticator
 from airbyte_cdk.utils import AirbyteTracedException
 from source_linkedin_ads.source import (
@@ -20,6 +19,7 @@ from source_linkedin_ads.source import (
     SourceLinkedinAds,
 )
 from source_linkedin_ads.streams import LINKEDIN_VERSION_API
+from security import safe_requests
 
 TEST_OAUTH_CONFIG: dict = {
     "start_date": "2021-08-01",
@@ -166,7 +166,7 @@ class TestLinkedinAdsStream:
     )
     def test_next_page_token(self, requests_mock, response_json, expected):
         requests_mock.get(self.url, json=response_json)
-        test_response = requests.get(self.url)
+        test_response = safe_requests.get(self.url)
 
         result = self.stream.next_page_token(test_response)
         assert expected == result
@@ -178,7 +178,7 @@ class TestLinkedinAdsStream:
 
     def test_parse_response(self, requests_mock):
         requests_mock.get(self.url, json={"elements": [{"test": "test"}]})
-        test_response = requests.get(self.url)
+        test_response = safe_requests.get(self.url)
 
         expected = {"test": "test"}
         result = list(self.stream.parse_response(test_response))
@@ -186,7 +186,7 @@ class TestLinkedinAdsStream:
 
     def test_should_retry(self, requests_mock):
         requests_mock.get(self.url, json={}, status_code=429)
-        test_response = requests.get(self.url)
+        test_response = safe_requests.get(self.url)
         result = self.stream.should_retry(test_response)
         assert result is True
 

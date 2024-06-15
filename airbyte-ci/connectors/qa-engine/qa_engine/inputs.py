@@ -8,9 +8,9 @@ from importlib.resources import files
 from typing import Optional
 
 import pandas as pd
-import requests
 
 from .constants import CONNECTOR_TEST_SUMMARY_URL
+from security import safe_requests
 
 LOGGER = logging.getLogger(__name__)
 
@@ -40,7 +40,7 @@ def get_connector_build_output_url(connector_technical_name: str) -> str:
 def fetch_latest_build_status_for_connector(connector_technical_name: str) -> BUILD_STATUSES:
     """Fetch the latest build status for a given connector version."""
     connector_build_output_url = get_connector_build_output_url(connector_technical_name)
-    connector_build_output_response = requests.get(connector_build_output_url)
+    connector_build_output_response = safe_requests.get(connector_build_output_url)
 
     # if the connector returned successfully, return the outcome
     if connector_build_output_response.status_code == 200:
@@ -81,7 +81,7 @@ def fetch_remote_catalog(catalog_url: str) -> pd.DataFrame:
     Returns:
         pd.DataFrame: Sources and destinations combined under a denormalized DataFrame.
     """
-    raw_catalog = requests.get(catalog_url).json()
+    raw_catalog = safe_requests.get(catalog_url).json()
     sources = pd.DataFrame(raw_catalog["sources"])
     destinations = pd.DataFrame(raw_catalog["destinations"])
     sources["connector_type"] = "source"

@@ -10,6 +10,7 @@ import jwt
 import requests
 
 from .logger import Logger
+from security import safe_requests
 
 TOKEN_TTL = 3600
 
@@ -31,7 +32,7 @@ class GoogleApi:
         token = self.get_access_token()
         headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json", "X-Goog-User-Project": self.project_id}
         # Making a get request
-        response = requests.get(url, headers=headers, params=params)
+        response = safe_requests.get(url, headers=headers, params=params)
         response.raise_for_status()
         return response.json()
 

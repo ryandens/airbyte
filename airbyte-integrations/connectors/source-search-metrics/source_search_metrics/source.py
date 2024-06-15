@@ -14,6 +14,7 @@ from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.auth import Oauth2Authenticator
 
 from .utils import to_datetime_str
+from security import safe_requests
 
 
 class SearchMetricsStream(HttpStream, ABC):
@@ -325,7 +326,7 @@ class SourceSearchMetrics(AbstractSource):
             url = "https://api.searchmetrics.com/v4/AdminStatusGetListProjects.json"
 
             auth_headers = {"Accept": "application/json", **authenticator.get_auth_header()}
-            session = requests.get(url, headers=auth_headers)
+            session = safe_requests.get(url, headers=auth_headers)
             session.raise_for_status()
 
             return True, None

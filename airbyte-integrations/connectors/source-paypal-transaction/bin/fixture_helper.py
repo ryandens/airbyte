@@ -7,6 +7,7 @@ from pprint import pprint
 
 # %%
 import requests
+from security import safe_requests
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -80,8 +81,7 @@ headers = {
     "Authorization": f"Bearer {API_TOKEN}",
     "Content-Type": "application/json",
 }
-response = requests.get(
-    url,
+response = safe_requests.get(url,
     headers=headers,
     params=params,
 )

@@ -7,11 +7,11 @@ from datetime import datetime
 from typing import List
 
 import pandas as pd
-import requests
 
 from .constants import INAPPROPRIATE_FOR_CLOUD_USE_CONNECTORS
 from .inputs import BUILD_STATUSES, fetch_latest_build_status_for_connector
 from .models import ConnectorQAReport, QAReport
+from security import safe_requests
 
 logger = logging.getLogger(__name__)
 
@@ -24,7 +24,7 @@ class QAReportGenerationError(Exception):
 
 
 def url_is_reachable(url: str) -> bool:
-    response = requests.get(url)
+    response = safe_requests.get(url)
     return response.status_code == 200
 
 

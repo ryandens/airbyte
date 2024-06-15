@@ -3,10 +3,9 @@
 #
 
 from typing import Any, Mapping
-
-import requests
 from airbyte_cdk.sources.streams.http.auth import TokenAuthenticator
 from requests.auth import HTTPBasicAuth
+from security import safe_requests
 
 
 class OutbrainAmplifyAuthenticator(TokenAuthenticator):
@@ -18,8 +17,7 @@ class OutbrainAmplifyAuthenticator(TokenAuthenticator):
     def generate_cache_token(
         self,
     ):
-        r = requests.get(
-            self.url_auth,
+        r = safe_requests.get(self.url_auth,
             auth=HTTPBasicAuth(self.config.get("credentials").get("username"), self.config.get("credentials").get("password")),
         )
         if r.status_code == 200:

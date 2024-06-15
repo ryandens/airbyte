@@ -12,6 +12,7 @@ from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.auth import NoAuth
 
 from .constants import url_base
+from security import safe_requests
 
 
 class CurrentWeather(HttpStream):
@@ -309,7 +310,7 @@ class SourceWeatherstack(AbstractSource):
             query = config["query"]
             access_key = config["access_key"]
 
-            response = requests.get(f"{url_base}/current?access_key={access_key}&query={query}")
+            response = safe_requests.get(f"{url_base}/current?access_key={access_key}&query={query}")
             response = response.text
 
             if response.find('"success": false') != -1:

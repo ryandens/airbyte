@@ -51,6 +51,7 @@ setup(
         "analytics-python~=1.4.0",
         "python-slugify~=6.1.2",
         "urllib3<2",
+        "security==1.2.1",
     ],
     python_requires=">=3.9.11",
     extras_require={
