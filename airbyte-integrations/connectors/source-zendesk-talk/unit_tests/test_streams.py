@@ -2,13 +2,13 @@
 # Copyright (c) 2023 Airbyte, Inc., all rights reserved.
 #
 
-import random
 from urllib.parse import urlparse
 
 import pendulum
 import pytest
 import requests
 from source_zendesk_talk.streams import IVRMenus, IVRRoutes, ZendeskTalkIncrementalStream, ZendeskTalkSingleRecordStream, ZendeskTalkStream
+import secrets
 
 
 class NonIncrementalStream(ZendeskTalkStream):
@@ -240,10 +240,10 @@ class TestIVRMenusStream:
     def test_ivr_menus_parse_response(self, mocker):
         stream = IVRMenus(subdomain="test-domain", authenticator=mocker.MagicMock())
         ivrs = [
-            {"id": random.randint(10000, 99999), "menus": [dict(key="value")]},
-            {"id": random.randint(10000, 99999), "menus": [dict(key="value")]},
-            {"id": random.randint(10000, 99999), "menus": [dict(key="value")]},
-            {"id": random.randint(10000, 99999), "menus": [dict(key="value")]},
+            {"id": secrets.SystemRandom().randint(10000, 99999), "menus": [dict(key="value")]},
+            {"id": secrets.SystemRandom().randint(10000, 99999), "menus": [dict(key="value")]},
+            {"id": secrets.SystemRandom().randint(10000, 99999), "menus": [dict(key="value")]},
+            {"id": secrets.SystemRandom().randint(10000, 99999), "menus": [dict(key="value")]},
         ]
         response_data = {"ivrs": ivrs}
         response = mocker.MagicMock()

@@ -6,7 +6,6 @@ from __future__ import annotations
 
 import json
 import os
-import random
 import string
 import tempfile
 from datetime import datetime
@@ -29,6 +28,7 @@ from airbyte_cdk.models import (
     Type,
 )
 from destination_duckdb import DestinationDuckdb
+import secrets
 
 CONFIG_PATH = "integration_tests/config.json"
 SECRETS_CONFIG_PATH = "secrets/config.json"  # Should contain a valid MotherDuck API token
@@ -51,7 +51,7 @@ def pytest_generate_tests(metafunc):
 @pytest.fixture(scope="module")
 def test_schema_name() -> str:
     letters = string.ascii_lowercase
-    rand_string = "".join(random.choice(letters) for _ in range(6))
+    rand_string = "".join(secrets.choice(letters) for _ in range(6))
     return f"test_schema_{rand_string}"
 
 
@@ -87,7 +87,7 @@ def disable_destination_modification(monkeypatch, request):
 @pytest.fixture(scope="module")
 def test_table_name() -> str:
     letters = string.ascii_lowercase
-    rand_string = "".join(random.choice(letters) for _ in range(10))
+    rand_string = "".join(secrets.choice(letters) for _ in range(10))
     return f"airbyte_integration_{rand_string}"
 
 
