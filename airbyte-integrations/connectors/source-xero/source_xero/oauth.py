@@ -35,7 +35,7 @@ class XeroSingleUseRefreshTokenOauth2Authenticator(SingleUseRefreshTokenOauth2Au
                 url=self.get_token_refresh_endpoint(),
                 data=self.build_refresh_request_body(),
                 headers=self.build_refresh_request_headers(),
-            )
+            timeout=60)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:

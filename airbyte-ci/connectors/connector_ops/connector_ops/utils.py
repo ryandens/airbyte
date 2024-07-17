@@ -50,7 +50,7 @@ TEST_GRADLE_DEPENDENCIES = [
 
 
 def download_catalog(catalog_url):
-    response = requests.get(catalog_url)
+    response = requests.get(catalog_url, timeout=60)
     return response.json()
 
 

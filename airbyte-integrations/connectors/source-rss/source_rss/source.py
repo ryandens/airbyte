@@ -142,7 +142,7 @@ class Items(IncrementalRssStream):
 class SourceRss(AbstractSource):
     def check_connection(self, logger, config) -> Tuple[bool, any]:
         try:
-            resp = requests.get(config.get("url"))
+            resp = requests.get(config.get("url"), timeout=60)
             status = resp.status_code
             if status == 200:
                 return True, None

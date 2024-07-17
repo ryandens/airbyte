@@ -295,7 +295,7 @@ class SourceOutreach(AbstractSource):
     def check_connection(self, logger, config) -> Tuple[bool, any]:
         try:
             access_token, _ = self._create_authenticator(config).refresh_access_token()
-            response = requests.get(_URL_BASE, headers={"Authorization": f"Bearer {access_token}"})
+            response = requests.get(_URL_BASE, headers={"Authorization": f"Bearer {access_token}"}, timeout=60)
             response.raise_for_status()
             return True, None
         except Exception as e:

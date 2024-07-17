@@ -174,7 +174,7 @@ class SourcePrimetric(AbstractSource):
         data = {"grant_type": "client_credentials", "client_id": client_id, "client_secret": client_secret, "refresh_token": refresh_token}
 
         try:
-            response = requests.request(method="POST", url=token_refresh_endpoint, data=data, headers=headers)
+            response = requests.request(method="POST", url=token_refresh_endpoint, data=data, headers=headers, timeout=60)
 
         except Exception as e:
             raise Exception(f"Error while refreshing access token: {e}") from e

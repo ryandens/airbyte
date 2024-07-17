@@ -144,7 +144,7 @@ class SourceGoogleSearchConsole(AbstractSource):
                 if auth_header.get("code", 0) in [400, 401]:
                     raise UnauthorizedOauthError
             # validate site urls with provided authenticator
-            response = requests.get("https://www.googleapis.com/webmasters/v3/sites", headers=auth_header)
+            response = requests.get("https://www.googleapis.com/webmasters/v3/sites", headers=auth_header, timeout=60)
         # validate the status of the response, if it was successfull
         if response.status_code != 200:
             raise UnidentifiedError(response.json())

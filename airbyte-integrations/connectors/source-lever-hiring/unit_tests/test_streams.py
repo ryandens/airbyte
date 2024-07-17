@@ -73,7 +73,7 @@ def test_request_params(patch_base_class, test_full_refresh_config):
 def test_next_page_token(patch_base_class, test_full_refresh_config):
     setup_responses()
     stream = LeverHiringStream(**test_full_refresh_config)
-    inputs = {"response": requests.get("https://api.sandbox.lever.co/v0/example_endpoint")}
+    inputs = {"response": requests.get("https://api.sandbox.lever.co/v0/example_endpoint", timeout=60)}
     expected_token = {"offset": "%5B1628543173558%2C%227bf8c1ac-4a68-450f-bea0-a1e2c3f5aeaf%22%5D"}
     assert stream.next_page_token(**inputs) == expected_token
 
@@ -82,7 +82,7 @@ def test_next_page_token(patch_base_class, test_full_refresh_config):
 def test_parse_response(patch_base_class, test_full_refresh_config):
     setup_responses()
     stream = LeverHiringStream(**test_full_refresh_config)
-    inputs = {"response": requests.get("https://api.sandbox.lever.co/v0/example_endpoint")}
+    inputs = {"response": requests.get("https://api.sandbox.lever.co/v0/example_endpoint", timeout=60)}
     expected_parsed_object = {
         "id": "fake_id",
         "name": "fake_name",

@@ -351,7 +351,7 @@ class SourceOkta(AbstractSource):
                 url,
                 params={"limit": 1},
                 headers=auth.get_auth_header(),
-            )
+            timeout=60)
 
             if response.status_code == requests.codes.ok:
                 return True, None

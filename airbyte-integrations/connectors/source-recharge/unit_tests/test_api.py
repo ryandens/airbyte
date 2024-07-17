@@ -145,7 +145,7 @@ class TestFullRefreshStreams:
         url = f"{stream.url_base}{stream.path()}"
         response = {**cursor_response, **self.generate_records(stream.data_path, 2)}
         requests_mock.get(url, json=response)
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert stream.next_page_token(response) == expected
 
     @pytest.mark.parametrize(
@@ -188,7 +188,7 @@ class TestFullRefreshStreams:
         url = f"{stream.url_base}{stream.path()}"
         data = {stream.data_path: data} if stream.data_path else data
         requests_mock.get(url, json=data)
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert list(stream.parse_response(response)) == expected
 
     @pytest.mark.parametrize(
@@ -205,7 +205,7 @@ class TestFullRefreshStreams:
         url = f"{stream.url_base}{stream.path()}"
         data = {stream.data_path: data} if stream.data_path else data
         requests_mock.get(url, json=data)
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert list(stream.parse_response(response)) == expected
 
     @pytest.mark.parametrize("owner_resource, expected", [({"customer": {"id": 123}}, {"customer": {"id": 123}})])
@@ -257,7 +257,7 @@ class TestIncrementalStreams:
         url = f"{stream.url_base}{stream.path()}"
         response = {**cursor_response, **self.generate_records(stream.data_path, 2)}
         requests_mock.get(url, json=response)
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert stream.next_page_token(response) == expected
 
     @pytest.mark.parametrize(

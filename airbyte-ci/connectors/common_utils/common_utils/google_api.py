@@ -31,7 +31,7 @@ class GoogleApi:
         token = self.get_access_token()
         headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json", "X-Goog-User-Project": self.project_id}
         # Making a get request
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(url, headers=headers, params=params, timeout=60)
         response.raise_for_status()
         return response.json()
 
@@ -41,7 +41,7 @@ class GoogleApi:
 
         headers = {"Authorization": f"Bearer {token}", "X-Goog-User-Project": self.project_id}
         # Making a get request
-        response = requests.post(url, headers=headers, json=json, params=params)
+        response = requests.post(url, headers=headers, json=json, params=params, timeout=60)
         try:
             response.raise_for_status()
         except Exception:
@@ -85,5 +85,5 @@ class GoogleApi:
                 "assertion": jwt,
                 "grant_type": "urn:ietf:params:oauth:grant-type:jwt-bearer",
             },
-        )
+        timeout=60)
         return resp.json()["access_token"]

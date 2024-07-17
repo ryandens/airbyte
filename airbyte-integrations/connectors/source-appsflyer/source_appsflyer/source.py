@@ -298,7 +298,7 @@ class SourceAppsflyer(AbstractSource):
             test_url = (
                 f"https://hq.appsflyer.com/export/{app_id}/partners_report/v5?api_token={api_token}&from={dates}&to={dates}&timezone=UTC"
             )
-            response = requests.request("GET", url=test_url)
+            response = requests.request("GET", url=test_url, timeout=60)
 
             if response.status_code != 200:
                 error_message = "The supplied APP ID is invalid" if response.status_code == 404 else response.text.rstrip("\n")

@@ -76,7 +76,7 @@ class SourceNotion(AbstractSource):
             # Endpoint docs: https://developers.notion.com/reference/get-self
             ping_endpoint = "https://api.notion.com/v1/users/me"
             notion_version = {"Notion-Version": "2022-06-28"}
-            response = requests.get(ping_endpoint, auth=authenticator, headers=notion_version)
+            response = requests.get(ping_endpoint, auth=authenticator, headers=notion_version, timeout=60)
 
             if response.status_code == 200:
                 return True, None

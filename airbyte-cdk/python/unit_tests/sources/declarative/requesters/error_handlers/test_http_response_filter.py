@@ -101,7 +101,7 @@ def test_matches(requests_mock, action, http_codes, predicate, error_contains, b
         headers=response.get("headers") or {},
         status_code=response.get("status_code"),
     )
-    response = requests.get("https://airbyte.io/")
+    response = requests.get("https://airbyte.io/", timeout=60)
     response_filter = HttpResponseFilter(
         action=action,
         config={},

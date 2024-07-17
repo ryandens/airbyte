@@ -672,7 +672,7 @@ class SourceCloseCom(AbstractSource):
         try:
             authenticator = Base64HttpAuthenticator(auth=(config["api_key"], "")).get_auth_header()
             url = "https://api.close.com/api/v1/me"
-            response = requests.request("GET", url=url, headers=authenticator)
+            response = requests.request("GET", url=url, headers=authenticator, timeout=60)
             response.raise_for_status()
             return True, None
         except Exception as e:

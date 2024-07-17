@@ -32,5 +32,5 @@ params = {
     "redirect_uri": REDIRECT_URI,
 }
 
-response = requests.post(url=GOOGLE_TOKEN_URL, params=params, headers=headers)
+response = requests.post(url=GOOGLE_TOKEN_URL, params=params, headers=headers, timeout=60)
 print(f'refresh token - {response.json().get("refresh_token")}')

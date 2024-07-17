@@ -139,7 +139,7 @@ def test_check_full_quota(
     url = "https://analyticsdata.googleapis.com/v1beta/"
     payload = response_quota
     requests_mock.post(url, json=payload)
-    response = requests.post(url)
+    response = requests.post(url, timeout=60)
     # process and prepare the scenario
     TEST_QUOTA_INSTANCE._check_quota(response)
 

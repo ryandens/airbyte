@@ -113,7 +113,7 @@ class SourceMyHours(AbstractSource):
             headers = authenticator.get_auth_header()
             headers.update(REQUEST_HEADERS)
 
-            response = requests.get(url, headers=headers)
+            response = requests.get(url, headers=headers, timeout=60)
             response.raise_for_status()
             return True, None
         except Exception as e:

@@ -94,12 +94,12 @@ class Client:
     def _make_request(self, api_url: str, params: Optional[Dict] = None) -> Union[Dict, object]:
         access_token = self._get_access_token()
         headers = {"Authorization": f"Bearer {access_token}"}
-        response = requests.get(api_url, headers=headers, params=params)
+        response = requests.get(api_url, headers=headers, params=params, timeout=60)
         if response.status_code == 429:
             if "Retry-After" in response.headers:
                 pause_time = float(response.headers["Retry-After"])
                 time.sleep(pause_time)
-                response = requests.get(api_url, headers=headers, params=params)
+                response = requests.get(api_url, headers=headers, params=params, timeout=60)
         if response.status_code != 200:
             raise requests.exceptions.RequestException(response.text)
         if response.headers["Content-Type"] == "application/octet-stream":

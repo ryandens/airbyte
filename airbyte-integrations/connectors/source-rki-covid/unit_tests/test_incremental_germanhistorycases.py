@@ -26,7 +26,7 @@ def test_cursor_field(patch_incremental_german_history_cases):
 def test_parse_response(patch_incremental_german_history_cases):
     config = {"start_date": "2022-04-27"}
     stream = GermanyHistoryCases(config)
-    response = requests.get("https://api.corona-zahlen.org/germany/history/cases/1")
+    response = requests.get("https://api.corona-zahlen.org/germany/history/cases/1", timeout=60)
     if response.json().get("data"):
         expected_response = response.json().get("data")
         assert stream.parse_response(response) == expected_response

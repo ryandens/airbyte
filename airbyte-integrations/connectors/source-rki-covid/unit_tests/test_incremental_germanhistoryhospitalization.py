@@ -36,7 +36,7 @@ def test_get_updated_state(patch_incremental_german_history_hospitalization):
 def test_parse_response(patch_incremental_german_history_hospitalization):
     config = {"start_date": "2022-04-27"}
     stream = GermanHistoryHospitalization(config)
-    response = requests.get("https://api.corona-zahlen.org/germany/history/hospitalization/1")
+    response = requests.get("https://api.corona-zahlen.org/germany/history/hospitalization/1", timeout=60)
     if response.json().get("data"):
         expected_response = response.json().get("data")
         assert stream.parse_response(response) == expected_response

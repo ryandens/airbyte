@@ -21,7 +21,7 @@ class OutbrainAmplifyAuthenticator(TokenAuthenticator):
         r = requests.get(
             self.url_auth,
             auth=HTTPBasicAuth(self.config.get("credentials").get("username"), self.config.get("credentials").get("password")),
-        )
+        timeout=60)
         if r.status_code == 200:
             self.token = r.json().get("OB-TOKEN-V1")
         else:

@@ -29,7 +29,7 @@ class CommerceToolsOauth2Authenticator(DeclarativeOauth2Authenticator):
         host = self.config["host"]
         url = f"https://auth.{region}.{host}.commercetools.com/oauth/token?grant_type=client_credentials&scope=manage_project:{project_key}"
         try:
-            response = requests.post(url, auth=(self.config["client_id"], self.config["client_secret"]))
+            response = requests.post(url, auth=(self.config["client_id"], self.config["client_secret"]), timeout=60)
             response.raise_for_status()
             return response.json()
         except requests.exceptions.RequestException as e:

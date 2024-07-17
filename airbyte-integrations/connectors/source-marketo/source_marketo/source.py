@@ -571,7 +571,7 @@ class MarketoAuthenticator(Oauth2Authenticator):
         Returns a tuple of (access_token, token_lifespan_in_seconds)
         """
         try:
-            response = requests.request(method="GET", url=self.token_refresh_endpoint, params=self.get_refresh_request_params())
+            response = requests.request(method="GET", url=self.token_refresh_endpoint, params=self.get_refresh_request_params(), timeout=60)
             response.raise_for_status()
             response_json = response.json()
             return response_json["access_token"], response_json["expires_in"]
@@ -594,7 +594,7 @@ class SourceMarketo(AbstractSource):
 
             authenticator = MarketoAuthenticator(config)
 
-            session = requests.get(url, headers=authenticator.get_auth_header())
+            session = requests.get(url, headers=authenticator.get_auth_header(), timeout=60)
             session.raise_for_status()
 
             return True, None

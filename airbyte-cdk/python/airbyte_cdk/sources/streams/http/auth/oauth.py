@@ -92,7 +92,7 @@ class Oauth2Authenticator(HttpAuthenticator):
                 url=self.token_refresh_endpoint,
                 data=self.get_refresh_request_body(),
                 headers=self.get_refresh_access_token_headers(),
-            )
+            timeout=60)
             response.raise_for_status()
             response_json = response.json()
             return response_json["access_token"], int(response_json["expires_in"])
