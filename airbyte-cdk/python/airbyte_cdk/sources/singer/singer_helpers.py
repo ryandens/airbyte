@@ -24,6 +24,7 @@ from airbyte_cdk.models import (
     SyncMode,
     Type,
 )
+from security import safe_command
 
 _INCREMENTAL = "INCREMENTAL"
 _FULL_TABLE = "FULL_TABLE"
@@ -142,8 +143,7 @@ class SingerHelper:
 
     @staticmethod
     def _read_singer_catalog(logger, shell_command: str) -> Mapping[str, Any]:
-        completed_process = subprocess.run(
-            shell_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
+        completed_process = safe_command.run(subprocess.run, shell_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True
         )
         for line in completed_process.stderr.splitlines():
             logger.log(*log_by_prefix(line, "ERROR"))
@@ -176,7 +176,7 @@ class SingerHelper:
 
     @staticmethod
     def read(logger, shell_command, is_message=(lambda x: True)) -> Iterator[AirbyteMessage]:
-        with subprocess.Popen(shell_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True) as p:
+        with safe_command.run(subprocess.Popen, shell_command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True) as p:
             for line, text_wrapper in SingerHelper._read_lines(p):
                 if text_wrapper is p.stdout:
                     out_json = to_json(line)

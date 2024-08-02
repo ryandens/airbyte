@@ -21,6 +21,7 @@ import yaml
 from normalization.destination_type import DestinationType
 from normalization.transform_catalog.transform import read_yaml_config, write_yaml_config
 from normalization.transform_config.transform import TransformConfig
+from security import safe_command
 
 NORMALIZATION_TEST_TARGET = "NORMALIZATION_TEST_TARGET"
 NORMALIZATION_TEST_MSSQL_DB_PORT = "NORMALIZATION_TEST_MSSQL_DB_PORT"
@@ -100,7 +101,7 @@ class DbtIntegrationTest(object):
                 "ssl_key_file=/var/lib/postgresql/server.key",
             ]
             print("Executing: ", " ".join(commands))
-            subprocess.call(commands)
+            safe_command.run(subprocess.call, commands)
             print("....Waiting for Postgres DB to start...15 sec")
             time.sleep(15)
         if not os.path.exists("../secrets"):
@@ -145,7 +146,7 @@ class DbtIntegrationTest(object):
                 "mysql/mysql-server",
             ]
             print("Executing: ", " ".join(commands))
-            subprocess.call(commands)
+            safe_command.run(subprocess.call, commands)
             print("....Waiting for MySQL DB to start...15 sec")
             time.sleep(15)
         if not os.path.exists("../secrets"):
@@ -216,7 +217,7 @@ class DbtIntegrationTest(object):
             ]
             # create test db
             print("Executing: ", " ".join(command_create_db))
-            subprocess.call(command_create_db)
+            safe_command.run(subprocess.call, command_create_db)
         if not os.path.exists("../secrets"):
             os.makedirs("../secrets")
         with open("../secrets/mssql.json", "w") as fh:
@@ -262,7 +263,7 @@ class DbtIntegrationTest(object):
                 "clickhouse/clickhouse-server:latest",
             ]
             print("Executing: ", " ".join(commands))
-            subprocess.call(commands)
+            safe_command.run(subprocess.call, commands)
             print("....Waiting for ClickHouse DB to start...15 sec")
             time.sleep(15)
         # Run additional commands to prepare the table
@@ -280,7 +281,7 @@ class DbtIntegrationTest(object):
         ]
         # create test db
         print("Executing: ", " ".join(command_create_db))
-        subprocess.call(command_create_db)
+        safe_command.run(subprocess.call, command_create_db)
         if not os.path.exists("../secrets"):
             os.makedirs("../secrets")
         with open("../secrets/clickhouse.json", "w") as fh:
@@ -317,7 +318,7 @@ class DbtIntegrationTest(object):
                 "pingcap/tidb:v5.4.0",
             ]
             print("Executing: ", " ".join(commands))
-            subprocess.call(commands)
+            safe_command.run(subprocess.call, commands)
             print("....Waiting for TiDB to start...15 sec")
             time.sleep(15)
         command_create_db = [
@@ -333,7 +334,7 @@ class DbtIntegrationTest(object):
             f"--execute=CREATE DATABASE IF NOT EXISTS {self.target_schema}",
         ]
         print("Executing: ", " ".join(command_create_db))
-        subprocess.call(command_create_db)
+        safe_command.run(subprocess.call, command_create_db)
         if not os.path.exists("../secrets"):
             os.makedirs("../secrets")
         with open("../secrets/tidb.json", "w") as fh:
@@ -406,7 +407,7 @@ class DbtIntegrationTest(object):
     def run_destination_process(message_file: str, test_root_dir: str, commands: List[str]):
         print("Executing: ", " ".join(commands))
         with open(os.path.join(test_root_dir, "destination_output.log"), "ab") as f:
-            process = subprocess.Popen(commands, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+            process = safe_command.run(subprocess.Popen, commands, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
 
             def writer():
                 if os.path.exists(message_file):
@@ -554,7 +555,7 @@ class DbtIntegrationTest(object):
     def run_check_dbt_subprocess(self, commands: list, cwd: str):
         error_count = 0
         with open(os.path.join(cwd, "dbt_output.log"), "ab") as f:
-            process = subprocess.Popen(commands, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=os.environ)
+            process = safe_command.run(subprocess.Popen, commands, cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=os.environ)
             for line in iter(lambda: process.stdout.readline(), b""):
                 f.write(line)
                 str_line = line.decode("utf-8")

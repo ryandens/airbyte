@@ -15,6 +15,7 @@ from typing import Optional
 import pkg_resources
 import requests
 from pipelines.consts import DAGGER_WRAP_ENV_VAR_NAME
+from security import safe_command
 
 LOGGER = logging.getLogger(__name__)
 BIN_DIR = Path.home() / "bin"
@@ -58,7 +59,7 @@ def get_dagger_cli_version(dagger_path: Optional[str]) -> Optional[str]:
     if not dagger_path:
         return None
     version_output = (
-        subprocess.run([dagger_path, "version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8").strip()
+        safe_command.run(subprocess.run, [dagger_path, "version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE).stdout.decode("utf-8").strip()
     )
     version_pattern = r"v(\d+\.\d+\.\d+)"
 
@@ -111,7 +112,7 @@ def call_current_command_with_dagger_run():
     try:
         try:
             LOGGER.info(f"Running command: {command}")
-            subprocess.run(command, check=True)
+            safe_command.run(subprocess.run, command, check=True)
         except KeyboardInterrupt:
             LOGGER.info("Keyboard interrupt detected. Exiting...")
             exit_code = 1
