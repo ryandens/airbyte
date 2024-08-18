@@ -73,7 +73,7 @@ python3 main_dev_transform_catalog.py \
 
 def read_profiles_yml(profile_dir: str) -> Any:
     with open(os.path.join(profile_dir, "profiles.yml"), "r") as file:
-        config = yaml.load(file, Loader=yaml.FullLoader)
+        config = yaml.load(file, Loader=yaml.SafeLoader)
         obj = config["normalize"]["outputs"]["prod"]
         return obj
 
