@@ -19,7 +19,7 @@ async def _generate_docs(dagger_client: dagger.Client):
     It will first load all the registries to render the template with up to date information.
     """
     docker_credentials = utils.docker.get_credentials()
-    env = Environment(loader=FileSystemLoader("base_images/templates"))
+    env = Environment(loader=FileSystemLoader("base_images/templates"), autoescape=True)
     template = env.get_template("README.md.j2")
     rendered_template = template.render({"registries": await version_registry.get_all_registries(dagger_client, docker_credentials)})
     with open("README.md", "w") as readme:
