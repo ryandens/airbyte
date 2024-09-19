@@ -262,7 +262,7 @@ class DBMStream(Stream, ABC):
         query = self.get_query(catalog_fields=catalog_fields, stream_slice=stream_slice)  # create and run the query
         report_url = query["metadata"]["googleCloudStoragePathForLatestReport"]  # Take the url of the generated report
         with io.StringIO(requests.get(report_url).text) as csv_response:
-            header = csv_response.readline().split(",")  # get the header of the file
+            header = csv_response.readline(5_000_000).split(",")  # get the header of the file
             header = [sanitize(field) for field in header]  # sanitize the field names
             data = self.buffer_reader(csv_response)  # Remove the unnecessary rows that do not have data
             reader = csv.DictReader(data, fieldnames=header)  # convert csv data into dict rows to be yielded by the generator
