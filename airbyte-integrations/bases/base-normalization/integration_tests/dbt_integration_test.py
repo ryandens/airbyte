@@ -6,7 +6,6 @@
 import json
 import os
 import pathlib
-import random
 import re
 import socket
 import string
@@ -21,6 +20,7 @@ import yaml
 from normalization.destination_type import DestinationType
 from normalization.transform_catalog.transform import read_yaml_config, write_yaml_config
 from normalization.transform_config.transform import TransformConfig
+import secrets
 
 NORMALIZATION_TEST_TARGET = "NORMALIZATION_TEST_TARGET"
 NORMALIZATION_TEST_MSSQL_DB_PORT = "NORMALIZATION_TEST_MSSQL_DB_PORT"
@@ -43,7 +43,7 @@ class DbtIntegrationTest(object):
 
     @staticmethod
     def random_string(length: int) -> str:
-        return "".join(random.choice(string.ascii_lowercase) for i in range(length))
+        return "".join(secrets.choice(string.ascii_lowercase) for i in range(length))
 
     def set_target_schema(self, target_schema: str):
         self.target_schema = target_schema
@@ -391,7 +391,7 @@ class DbtIntegrationTest(object):
         elif destination_type.value == DestinationType.REDSHIFT.value:
             profiles_config["schema"] = self.target_schema
             if random_schema:
-                profiles_config["schema"] = self.target_schema + "_" + "".join(random.choices(string.ascii_lowercase, k=5))
+                profiles_config["schema"] = self.target_schema + "_" + "".join(secrets.SystemRandom().choices(string.ascii_lowercase, k=5))
         else:
             profiles_config["schema"] = self.target_schema
         if destination_type.value == DestinationType.CLICKHOUSE.value:

@@ -2,7 +2,6 @@
 # Copyright (c) 2023 Airbyte, Inc., all rights reserved.
 #
 
-import random
 import string
 from datetime import datetime
 from json import dumps, load
@@ -20,6 +19,7 @@ from airbyte_cdk.models.airbyte_protocol import (
 from destination_firebolt.destination import DestinationFirebolt, establish_connection
 from firebolt.common.exception import FireboltError
 from pytest import fixture, mark, raises
+import secrets
 
 
 @fixture(scope="module")
@@ -33,7 +33,7 @@ def config() -> Dict[str, str]:
 @fixture(scope="module")
 def test_table_name() -> str:
     letters = string.ascii_lowercase
-    rnd_string = "".join(random.choice(letters) for i in range(10))
+    rnd_string = "".join(secrets.choice(letters) for i in range(10))
     return f"airbyte_integration_{rnd_string}"
 
 

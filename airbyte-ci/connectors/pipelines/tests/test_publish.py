@@ -3,13 +3,13 @@
 #
 
 import json
-import random
 from typing import List
 
 import anyio
 import pytest
 from pipelines.airbyte_ci.connectors.publish import pipeline as publish_pipeline
 from pipelines.models.steps import StepStatus
+import secrets
 
 pytestmark = [
     pytest.mark.anyio,
@@ -31,7 +31,7 @@ class TestCheckConnectorImageDoesNotExists:
     @pytest.fixture(scope="class")
     def three_random_connectors_image_names(self, oss_registry: dict) -> List[str]:
         connectors = oss_registry["sources"] + oss_registry["destinations"]
-        random.shuffle(connectors)
+        secrets.SystemRandom().shuffle(connectors)
         return [f"{connector['dockerRepository']}:{connector['dockerImageTag']}" for connector in connectors[:3]]
 
     async def test_run_skipped_when_already_published(self, three_random_connectors_image_names, publish_context):
@@ -53,7 +53,7 @@ class TestUploadSpecToCache:
     @pytest.fixture(scope="class")
     def random_connector(self, oss_registry: dict) -> dict:
         connectors = oss_registry["sources"] + oss_registry["destinations"]
-        random.shuffle(connectors)
+        secrets.SystemRandom().shuffle(connectors)
         return connectors[0]
 
     @pytest.mark.parametrize(

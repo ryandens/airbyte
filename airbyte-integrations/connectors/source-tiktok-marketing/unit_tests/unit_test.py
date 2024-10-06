@@ -3,7 +3,6 @@
 #
 
 import json
-import random
 from typing import Any, Dict, Iterable, List, Mapping, Tuple
 from unittest.mock import patch
 
@@ -15,6 +14,7 @@ from airbyte_cdk.models import ConnectorSpecification
 from airbyte_cdk.sources.streams.http.exceptions import UserDefinedBackoffException
 from source_tiktok_marketing import SourceTiktokMarketing
 from source_tiktok_marketing.streams import Ads, Advertisers, JsonUpdatedState
+import secrets
 
 SANDBOX_CONFIG_FILE = "secrets/sandbox_config.json"
 PROD_CONFIG_FILE = "secrets/prod_config.json"
@@ -70,7 +70,7 @@ def generate_pages(items: List[Mapping[str, Any]], page_size: int, last_empty: b
 
 
 def random_integer(max_value: int = 1634125471, min_value: int = 1) -> int:
-    return random.randint(min_value, max_value)
+    return secrets.SystemRandom().randint(min_value, max_value)
 
 
 def unixtime2str(unix_time: int) -> str:

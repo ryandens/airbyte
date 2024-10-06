@@ -3,7 +3,6 @@
 #
 
 import json
-import random
 import sqlite3
 import string
 import tempfile
@@ -24,6 +23,7 @@ from airbyte_cdk.models import (
     Type,
 )
 from destination_sqlite import DestinationSqlite
+import secrets
 
 
 @pytest.fixture(autouse=True)
@@ -45,7 +45,7 @@ def local_file_config() -> Dict[str, str]:
 @pytest.fixture(scope="module")
 def test_table_name() -> str:
     letters = string.ascii_lowercase
-    rand_string = "".join(random.choice(letters) for _ in range(10))
+    rand_string = "".join(secrets.choice(letters) for _ in range(10))
     return f"airbyte_integration_{rand_string}"
 
 
