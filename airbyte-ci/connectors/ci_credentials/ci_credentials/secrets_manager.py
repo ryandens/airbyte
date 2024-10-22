@@ -10,12 +10,11 @@ from glob import glob
 from json.decoder import JSONDecodeError
 from pathlib import Path
 from typing import Any, ClassVar, List, Mapping
-
-import requests
 import yaml
 from common_utils import GoogleApi, Logger
 
 from .models import DEFAULT_SECRET_FILE, RemoteSecret, Secret
+from security import safe_requests
 
 DEFAULT_SECRET_FILE_WITH_EXT = DEFAULT_SECRET_FILE + ".json"
 
@@ -290,7 +289,7 @@ class SecretsManager:
         return new_remote_secrets
 
     def _get_spec_mask(self) -> List[str]:
-        response = requests.get(self.SPEC_MASK_URL, allow_redirects=True)
+        response = safe_requests.get(self.SPEC_MASK_URL, allow_redirects=True)
         if not response.ok:
             self.logger.error(f"Failed to fetch spec mask: {response.content}")
         try:

@@ -3,7 +3,6 @@
 #
 
 import pytest
-import requests
 from source_zendesk_chat.source import ZendeskAuthentication
 from source_zendesk_chat.streams import (
     Accounts,
@@ -19,6 +18,7 @@ from source_zendesk_chat.streams import (
     Skills,
     Triggers,
 )
+from security import safe_requests
 
 TEST_CONFIG: dict = {
     "start_date": "2020-10-01T00:00:00Z",
@@ -69,7 +69,7 @@ class TestFullRefreshStreams:
         url = f"{stream.url_base}{stream.path()}"
         test_headers = {"Retry-After": expected}
         requests_mock.get(url, headers=test_headers)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.backoff_time(response)
         assert result == int(expected)
 
@@ -110,7 +110,7 @@ class TestFullRefreshStreams:
         next_url = f"{url}/cursor.json?cursor={expected_cursor}"
         test_response = {"next_url": next_url}
         requests_mock.get(url, json=test_response)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.next_page_token(response)
         assert result == {"cursor": [expected_cursor]}
 
@@ -149,7 +149,7 @@ class TestFullRefreshStreams:
         stream = stream_cls(TEST_CONFIG)
         url = f"{stream.url_base}{stream.path()}"
         requests_mock.get(url, json=test_response)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.parse_response(response)
         assert list(result) == expected
 
@@ -196,7 +196,7 @@ class TestTimeIncrementalStreams:
         test_response.update(**{"count": stream.limit})
         url = f"{stream.url_base}{stream.path()}"
         requests_mock.get(url, json=test_response)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.next_page_token(response)
         assert result == expected
 
@@ -243,7 +243,7 @@ class TestTimeIncrementalStreams:
         stream = stream_cls(start_date=TEST_CONFIG["start_date"])
         url = f"{stream.url_base}{stream.path()}"
         requests_mock.get(url, json=test_response)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.parse_response(response)
         assert list(result) == expected
 
@@ -313,7 +313,7 @@ class TestIdIncrementalStreams:
         stream.limit = 1
         url = f"{stream.url_base}{stream.path()}"
         requests_mock.get(url, json=test_response)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.next_page_token(response)
         assert result == expected
 
@@ -327,7 +327,7 @@ class TestIdIncrementalStreams:
         stream = stream_cls(TEST_CONFIG)
         url = f"{stream.url_base}{stream.path()}"
         requests_mock.get(url, json=test_response)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         result = stream.parse_response(response)
         assert list(result) == expected
 

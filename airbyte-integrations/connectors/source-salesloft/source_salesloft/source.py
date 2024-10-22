@@ -15,6 +15,7 @@ from airbyte_cdk.sources.streams.http.auth.core import HttpAuthenticator
 from airbyte_cdk.sources.streams.http.requests_native_auth.oauth import SingleUseRefreshTokenOauth2Authenticator
 from airbyte_cdk.sources.streams.http.requests_native_auth.token import TokenAuthenticator
 from requests.auth import AuthBase
+from security import safe_requests
 
 
 # Basic full refresh stream
@@ -279,7 +280,7 @@ class SourceSalesloft(AbstractSource):
     def check_connection(self, logger, config) -> Tuple[bool, any]:
         try:
             auth = self._create_authenticator(config)
-            response = requests.get("https://api.salesloft.com/v2/me.json", headers=auth.get_auth_header())
+            response = safe_requests.get("https://api.salesloft.com/v2/me.json", headers=auth.get_auth_header())
             response.raise_for_status()
             return True, None
         except Exception as e:

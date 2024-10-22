@@ -4,10 +4,10 @@
 
 
 import pytest
-import requests
 import responses
 from airbyte_cdk.sources.streams.http.auth import NoAuth
 from source_us_census.source import UsCensusStream
+from security import safe_requests
 
 
 @pytest.fixture
@@ -89,7 +89,7 @@ def test_parse_response(us_census_stream: UsCensusStream, response: str, expecte
         us_census_stream.url_base,
         body=response,
     )
-    resp = requests.get(us_census_stream.url_base)
+    resp = safe_requests.get(us_census_stream.url_base)
 
     assert list(us_census_stream.parse_response(resp)) == expected_result
 

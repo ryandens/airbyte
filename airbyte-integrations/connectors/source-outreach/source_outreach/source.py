@@ -13,6 +13,7 @@ from airbyte_cdk.sources.streams import Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.auth.core import HttpAuthenticator
 from airbyte_cdk.sources.streams.http.auth.oauth import Oauth2Authenticator
+from security import safe_requests
 
 _TOKEN_REFRESH_ENDPOINT = "https://api.outreach.io/oauth/token"
 _URL_BASE = "https://api.outreach.io/api/v2/"
@@ -295,7 +296,7 @@ class SourceOutreach(AbstractSource):
     def check_connection(self, logger, config) -> Tuple[bool, any]:
         try:
             access_token, _ = self._create_authenticator(config).refresh_access_token()
-            response = requests.get(_URL_BASE, headers={"Authorization": f"Bearer {access_token}"})
+            response = safe_requests.get(_URL_BASE, headers={"Authorization": f"Bearer {access_token}"})
             response.raise_for_status()
             return True, None
         except Exception as e:

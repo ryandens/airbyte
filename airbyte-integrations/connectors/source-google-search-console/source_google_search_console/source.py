@@ -39,6 +39,7 @@ from source_google_search_console.streams import (
     Sitemaps,
     Sites,
 )
+from security import safe_requests
 
 custom_reports_schema = {
     "type": "array",
@@ -144,7 +145,7 @@ class SourceGoogleSearchConsole(AbstractSource):
                 if auth_header.get("code", 0) in [400, 401]:
                     raise UnauthorizedOauthError
             # validate site urls with provided authenticator
-            response = requests.get("https://www.googleapis.com/webmasters/v3/sites", headers=auth_header)
+            response = safe_requests.get("https://www.googleapis.com/webmasters/v3/sites", headers=auth_header)
         # validate the status of the response, if it was successfull
         if response.status_code != 200:
             raise UnidentifiedError(response.json())

@@ -5,8 +5,6 @@
 
 from logging import Logger
 from typing import Any, Iterable, List, Mapping, Optional, cast
-
-import requests
 from airbyte_cdk.destinations import Destination
 from airbyte_cdk.models import (
     AirbyteConnectionStatus,
@@ -20,6 +18,7 @@ from airbyte_cdk.models import (
 from destination_convex.client import ConvexClient
 from destination_convex.config import ConvexConfig
 from destination_convex.writer import ConvexWriter
+from security import safe_requests
 
 
 class DestinationConvex(Destination):
@@ -125,7 +124,7 @@ class DestinationConvex(Destination):
         access_key = config["access_key"]
         url = f"{deployment_url}/version"
         headers = {"Authorization": f"Convex {access_key}"}
-        resp = requests.get(url, headers=headers)
+        resp = safe_requests.get(url, headers=headers)
         if resp.status_code == 200:
             return AirbyteConnectionStatus(status=Status.SUCCEEDED)
         else:

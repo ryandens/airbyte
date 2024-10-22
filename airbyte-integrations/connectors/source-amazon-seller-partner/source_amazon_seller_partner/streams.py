@@ -22,6 +22,7 @@ from airbyte_cdk.sources.streams.http.exceptions import DefaultBackoffException
 from airbyte_cdk.sources.streams.http.rate_limiting import default_backoff_handler
 from airbyte_cdk.sources.utils.transform import TransformConfig, TypeTransformer
 from airbyte_cdk.utils.traced_exception import AirbyteTracedException
+from security import safe_requests
 
 REPORTS_API_VERSION = "2021-06-30"
 ORDERS_API_VERSION = "v0"
@@ -254,7 +255,7 @@ class ReportsAmazonSPStream(HttpStream, ABC):
         """
         Unpacks a report document
         """
-        report = requests.get(payload.get("url"))
+        report = safe_requests.get(payload.get("url"))
         report.raise_for_status()
         if "compressionAlgorithm" in payload:
             return gzip.decompress(report.content).decode("iso-8859-1")

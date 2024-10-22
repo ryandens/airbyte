@@ -6,6 +6,7 @@
 import pytest
 import requests
 from source_shopify.source import BalanceTransactions, DiscountCodes, FulfillmentOrders, PriceRules, SourceShopify
+from security import safe_requests
 
 
 def test_get_next_page_token(requests_mock, auth_config):
@@ -73,7 +74,7 @@ def test_unavailable_stream(requests_mock, basic_config, stream, slice, status, 
     stream = stream(config)
     url = stream.url_base + stream.path(stream_slice=slice)
     requests_mock.get(url=url, json=json_response, status_code=status)
-    response = requests.get(url)
+    response = safe_requests.get(url)
     assert stream.should_retry(response) is expected_output
 
 

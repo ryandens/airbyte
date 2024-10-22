@@ -15,6 +15,7 @@ from source_my_hours.auth import MyHoursAuthenticator
 from source_my_hours.stream import MyHoursStream
 
 from .constants import REQUEST_HEADERS, URL_BASE
+from security import safe_requests
 
 
 class Clients(MyHoursStream):
@@ -113,7 +114,7 @@ class SourceMyHours(AbstractSource):
             headers = authenticator.get_auth_header()
             headers.update(REQUEST_HEADERS)
 
-            response = requests.get(url, headers=headers)
+            response = safe_requests.get(url, headers=headers)
             response.raise_for_status()
             return True, None
         except Exception as e:

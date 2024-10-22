@@ -13,6 +13,7 @@ from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import IncrementalMixin, Stream
 from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.requests_native_auth.token import TokenAuthenticator
+from security import safe_requests
 
 ConvexConfig = TypedDict(
     "ConvexConfig",
@@ -44,7 +45,7 @@ class SourceConvex(AbstractSource):
             "Authorization": f"Convex {access_key}",
             "Convex-Client": f"airbyte-export-{CONVEX_CLIENT_VERSION}",
         }
-        return requests.get(url, headers=headers)
+        return safe_requests.get(url, headers=headers)
 
     def check_connection(self, logger: Any, config: Mapping[str, Any]) -> Tuple[bool, Any]:
         """

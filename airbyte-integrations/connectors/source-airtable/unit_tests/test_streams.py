@@ -8,6 +8,7 @@ from unittest.mock import MagicMock
 import pytest
 import requests
 from source_airtable.streams import URL_BASE, AirtableBases, AirtableStream, AirtableTables
+from security import safe_requests
 
 
 class TestBases:
@@ -159,5 +160,5 @@ class TestAirtableStream:
         stream = self.stream_instance(prepared_stream)
         url = f"{stream.url_base}/{stream.path()}"
         requests_mock.get(url, status_code=200, json=streams_json_response)
-        response = requests.get(url)
+        response = safe_requests.get(url)
         assert list(stream.parse_response(response)) == streams_processed_response

@@ -6,9 +6,9 @@
 from typing import Dict
 
 import pytest
-import requests
 from source_zendesk_support.source import SourceZendeskSupport
 from source_zendesk_support.streams import Users
+from security import safe_requests
 
 
 @pytest.fixture(scope="session", name="config")
@@ -41,7 +41,7 @@ def test_backoff(requests_mock, config, x_rate_limit, retry_after, expected):
 
     url = f"{test_stream.url_base}{test_stream.path()}/count.json"
     requests_mock.get(url, json=test_response_json, headers=test_response_header, status_code=429)
-    test_response = requests.get(url)
+    test_response = safe_requests.get(url)
 
     actual = test_stream.backoff_time(test_response)
     assert actual == expected

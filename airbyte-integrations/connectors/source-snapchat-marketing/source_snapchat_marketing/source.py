@@ -19,6 +19,7 @@ from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.auth import Oauth2Authenticator
 from airbyte_cdk.sources.streams.http.exceptions import DefaultBackoffException
 from airbyte_cdk.sources.utils.schema_helpers import ResourceSchemaLoader
+from security import safe_requests
 
 # https://marketingapi.snapchat.com/docs/#core-metrics
 # https://marketingapi.snapchat.com/docs/#metrics-and-supported-granularities
@@ -783,7 +784,7 @@ class SourceSnapchatMarketing(AbstractSource):
             token = auth.get_access_token()
             url = f"{SnapchatMarketingStream.url_base}me"
 
-            session = requests.get(url, headers={"Authorization": "Bearer {}".format(token)})
+            session = safe_requests.get(url, headers={"Authorization": "Bearer {}".format(token)})
             session.raise_for_status()
             return True, None
 

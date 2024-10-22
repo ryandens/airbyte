@@ -8,7 +8,6 @@ import re
 from typing import Any, List, Mapping, Tuple
 
 import pendulum
-import requests
 from airbyte_cdk import AirbyteLogger
 from airbyte_cdk.sources import AbstractSource
 from airbyte_cdk.sources.streams import Stream
@@ -30,6 +29,7 @@ from .streams import (
     Tags,
     Unsubscribes,
 )
+from security import safe_requests
 
 
 class MailChimpAuthenticator:
@@ -41,7 +41,7 @@ class MailChimpAuthenticator:
         This method retrieves the data center for OAuth credentials.
         """
         try:
-            response = requests.get(
+            response = safe_requests.get(
                 "https://login.mailchimp.com/oauth2/metadata", headers={"Authorization": "OAuth {}".format(access_token)}
             )
 
@@ -107,7 +107,7 @@ class SourceMailchimp(AbstractSource):
 
         try:
             authenticator = MailChimpAuthenticator().get_auth(config)
-            response = requests.get(
+            response = safe_requests.get(
                 f"https://{authenticator.data_center}.api.mailchimp.com/3.0/ping", headers=authenticator.get_auth_header()
             )
 

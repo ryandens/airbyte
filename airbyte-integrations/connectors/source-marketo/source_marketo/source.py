@@ -19,6 +19,7 @@ from airbyte_cdk.sources.streams.http import HttpStream
 from airbyte_cdk.sources.streams.http.auth import Oauth2Authenticator
 
 from .utils import STRING_TYPES, clean_string, format_value, to_datetime_str
+from security import safe_requests
 
 
 class MarketoStream(HttpStream, ABC):
@@ -594,7 +595,7 @@ class SourceMarketo(AbstractSource):
 
             authenticator = MarketoAuthenticator(config)
 
-            session = requests.get(url, headers=authenticator.get_auth_header())
+            session = safe_requests.get(url, headers=authenticator.get_auth_header())
             session.raise_for_status()
 
             return True, None

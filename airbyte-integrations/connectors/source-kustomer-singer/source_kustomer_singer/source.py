@@ -9,6 +9,7 @@ import requests
 from airbyte_cdk.logger import AirbyteLogger
 from airbyte_cdk.models import AirbyteConnectionStatus, Status
 from airbyte_cdk.sources.singer import SingerSource
+from security import safe_requests
 
 
 class SourceKustomerSinger(SingerSource):
@@ -31,7 +32,7 @@ class SourceKustomerSinger(SingerSource):
         headers = {"Authorization": f"Bearer {config['api_token']}"}
 
         try:
-            session = requests.get(url, headers=headers)
+            session = safe_requests.get(url, headers=headers)
             session.raise_for_status()
             return AirbyteConnectionStatus(status=Status.SUCCEEDED)
         except requests.exceptions.RequestException as e:

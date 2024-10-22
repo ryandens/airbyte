@@ -14,6 +14,7 @@ from airbyte_cdk.sources.streams import Stream
 from airbyte_cdk.sources.streams.http.auth import TokenAuthenticator
 
 from .streams import Collectors, SurveyCollectors, SurveyPages, SurveyQuestions, SurveyResponses, Surveys
+from security import safe_requests
 
 
 class SourceSurveymonkey(AbstractSource):
@@ -63,7 +64,7 @@ class SourceSurveymonkey(AbstractSource):
                 )
                 return False, msg
         try:
-            response = requests.get(url="https://api.surveymonkey.com/v3/users/me", headers=authenticator.get_auth_header())
+            response = safe_requests.get(url="https://api.surveymonkey.com/v3/users/me", headers=authenticator.get_auth_header())
             response.raise_for_status()
             return self._check_scopes(response.json())
         except Exception as e:

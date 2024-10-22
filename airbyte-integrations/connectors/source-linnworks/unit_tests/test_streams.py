@@ -7,6 +7,7 @@ from unittest.mock import MagicMock
 import pytest
 import requests
 from source_linnworks.streams import LinnworksStream, StockItems, StockLocationDetails, StockLocations
+from security import safe_requests
 
 
 @pytest.fixture
@@ -106,7 +107,7 @@ def test_stock_locations_details_request_params(mocker, stream_slice, expected):
 def test_stock_items_next_page_token(mocker, requests_mock, query, item_count, expected):
     url = f"http://dummy{query}"
     requests_mock.get(url, json=[None] * item_count)
-    response = requests.get(url)
+    response = safe_requests.get(url)
 
     source = StockItems()
     next_page_token = source.next_page_token(response)
