@@ -41,7 +41,7 @@ def test_parse_response(patch_base_class, requests_mock):
             },
         },
     )
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     inputs = {"response": resp}
     expected_parsed_object = {"Bar": {"Baz": "baz"}, "Foo": "foo"}
     assert next(stream.parse_response(**inputs)) == expected_parsed_object
@@ -63,7 +63,7 @@ def test_http_method(patch_base_class):
 def test_backoff_time(patch_base_class, requests_mock, header_name, header_value, expected):
     stream = LinnworksStream()
     requests_mock.get("https://dummy", headers={header_name: header_value}, status_code=429)
-    result = stream.backoff_time(requests.get("https://dummy"))
+    result = stream.backoff_time(requests.get("https://dummy", timeout=60))
     assert result == expected
 
 
@@ -106,7 +106,7 @@ def test_stock_locations_details_request_params(mocker, stream_slice, expected):
 def test_stock_items_next_page_token(mocker, requests_mock, query, item_count, expected):
     url = f"http://dummy{query}"
     requests_mock.get(url, json=[None] * item_count)
-    response = requests.get(url)
+    response = requests.get(url, timeout=60)
 
     source = StockItems()
     next_page_token = source.next_page_token(response)
@@ -124,7 +124,7 @@ def test_stock_items_next_page_token(mocker, requests_mock, query, item_count, e
 )
 def test_stock_items_parse_response(mocker, requests_mock, status_code, expected):
     requests_mock.get("https://dummy", json="the_response", status_code=status_code)
-    response = requests.get("https://dummy")
+    response = requests.get("https://dummy", timeout=60)
 
     source = StockItems()
     parsed_response = source.parse_response(response)

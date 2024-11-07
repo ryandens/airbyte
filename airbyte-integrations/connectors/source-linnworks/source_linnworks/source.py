@@ -72,7 +72,7 @@ class LinnworksAuthenticator(Oauth2Authenticator):
 
     def refresh_access_token(self) -> Tuple[str, int]:
         try:
-            response = requests.request(method="POST", url=self.token_refresh_endpoint, data=self.get_refresh_request_body())
+            response = requests.request(method="POST", url=self.token_refresh_endpoint, data=self.get_refresh_request_body(), timeout=60)
             response.raise_for_status()
             response_json = response.json()
             return response_json[self.access_token_name], response_json[self.expires_in_name], response_json[self.server_name]

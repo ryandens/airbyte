@@ -247,7 +247,7 @@ class UnstructuredParser(FileTypeParser):
 
         file_data = {"files": ("filename", file_handle, FILETYPE_TO_MIMETYPE[filetype])}
 
-        response = requests.post(f"{format.api_url}/general/v0/general", headers=headers, data=data, files=file_data)
+        response = requests.post(f"{format.api_url}/general/v0/general", headers=headers, data=data, files=file_data, timeout=60)
 
         if response.status_code == 422:
             # 422 means the file couldn't be processed, but the API is working. Treat this as a parsing error (passing an error record to the destination).

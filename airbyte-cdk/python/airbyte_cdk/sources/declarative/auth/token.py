@@ -161,7 +161,7 @@ def get_new_session_token(api_url: str, username: str, password: str, response_k
         f"{api_url}",
         headers={"Content-Type": "application/json"},
         json={"username": username, "password": password},
-    )
+    timeout=60)
     response.raise_for_status()
     if not response.ok:
         raise ConnectionError(f"Failed to retrieve new session token, response code {response.status_code} because {response.reason}")
@@ -239,7 +239,7 @@ class LegacySessionTokenAuthenticator(DeclarativeAuthenticator):
             response = requests.get(
                 f"{self._api_url.eval(self.config)}{self._validate_session_url.eval(self.config)}",
                 headers={self.auth_header: self._session_token.eval(self.config)},
-            )
+            timeout=60)
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == requests.codes["unauthorized"]:

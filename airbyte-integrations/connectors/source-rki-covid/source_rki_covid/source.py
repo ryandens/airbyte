@@ -600,7 +600,7 @@ class SourceRkiCovid(AbstractSource):
         :return Tuple[bool, any]: (True, None) if the input config can be used to connect to the API successfully, (False, error) otherwise.
         """
         try:
-            req = requests.get(RkiCovidStream.url_base + "germany")
+            req = requests.get(RkiCovidStream.url_base + "germany", timeout=60)
             if req.status_code == 200:
                 return True, None
             return False, req.reason

@@ -148,6 +148,6 @@ class SourceFixtureOauthAuthenticator(Oauth2Authenticator):
     """
 
     def refresh_access_token(self) -> Tuple[str, int]:
-        response = requests.request(method="POST", url=self.get_token_refresh_endpoint(), params={})
+        response = requests.request(method="POST", url=self.get_token_refresh_endpoint(), params={}, timeout=60)
         response.raise_for_status()
         return "some_access_token", 1800  # Mock oauth response values to be used during the data retrieval step

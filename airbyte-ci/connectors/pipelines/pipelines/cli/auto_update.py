@@ -43,7 +43,7 @@ def _is_version_available(version: str, is_dev: bool) -> bool:
     url = f"{RELEASE_URL}/{os_name}/{version}/airbyte-ci"
 
     # Just check if the URL exists, but dont download it
-    return requests.head(url).ok
+    return requests.head(url, timeout=60).ok
 
 
 def _get_latest_version() -> str:

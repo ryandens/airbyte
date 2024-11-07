@@ -14,7 +14,7 @@ pytestmark = [
 @pytest.fixture(scope="module")
 def latest_cdk_version():
     cdk_pypi_url = "https://pypi.org/pypi/airbyte-cdk/json"
-    response = requests.get(cdk_pypi_url)
+    response = requests.get(cdk_pypi_url, timeout=60)
     response.raise_for_status()
     package_info = response.json()
     return package_info["info"]["version"]

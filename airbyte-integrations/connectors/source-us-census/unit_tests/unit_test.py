@@ -89,7 +89,7 @@ def test_parse_response(us_census_stream: UsCensusStream, response: str, expecte
         us_census_stream.url_base,
         body=response,
     )
-    resp = requests.get(us_census_stream.url_base)
+    resp = requests.get(us_census_stream.url_base, timeout=60)
 
     assert list(us_census_stream.parse_response(resp)) == expected_result
 

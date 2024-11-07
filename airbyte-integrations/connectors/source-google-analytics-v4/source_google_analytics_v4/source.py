@@ -492,7 +492,7 @@ class GoogleAnalyticsServiceOauth2Authenticator(Oauth2Authenticator):
         """
         response_json = None
         try:
-            response = requests.request(method="POST", url=self.token_refresh_endpoint, params=self.get_refresh_request_params())
+            response = requests.request(method="POST", url=self.token_refresh_endpoint, params=self.get_refresh_request_params(), timeout=60)
 
             response_json = response.json()
             response.raise_for_status()

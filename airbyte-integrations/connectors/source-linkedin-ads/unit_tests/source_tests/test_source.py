@@ -166,7 +166,7 @@ class TestLinkedinAdsStream:
     )
     def test_next_page_token(self, requests_mock, response_json, expected):
         requests_mock.get(self.url, json=response_json)
-        test_response = requests.get(self.url)
+        test_response = requests.get(self.url, timeout=60)
 
         result = self.stream.next_page_token(test_response)
         assert expected == result
@@ -178,7 +178,7 @@ class TestLinkedinAdsStream:
 
     def test_parse_response(self, requests_mock):
         requests_mock.get(self.url, json={"elements": [{"test": "test"}]})
-        test_response = requests.get(self.url)
+        test_response = requests.get(self.url, timeout=60)
 
         expected = {"test": "test"}
         result = list(self.stream.parse_response(test_response))
@@ -186,7 +186,7 @@ class TestLinkedinAdsStream:
 
     def test_should_retry(self, requests_mock):
         requests_mock.get(self.url, json={}, status_code=429)
-        test_response = requests.get(self.url)
+        test_response = requests.get(self.url, timeout=60)
         result = self.stream.should_retry(test_response)
         assert result is True
 

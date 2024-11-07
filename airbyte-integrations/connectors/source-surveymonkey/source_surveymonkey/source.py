@@ -46,8 +46,8 @@ class SourceSurveymonkey(AbstractSource):
             errors = []
             for survey_id in config["survey_ids"]:
                 response = requests.head(
-                    url=f"https://api.surveymonkey.com/v3/surveys/{survey_id}/details", headers=authenticator.get_auth_header()
-                )
+                    url=f"https://api.surveymonkey.com/v3/surveys/{survey_id}/details", headers=authenticator.get_auth_header(), 
+                timeout=60)
                 try:
                     response.raise_for_status()
                 except requests.exceptions.HTTPError:
@@ -63,7 +63,7 @@ class SourceSurveymonkey(AbstractSource):
                 )
                 return False, msg
         try:
-            response = requests.get(url="https://api.surveymonkey.com/v3/users/me", headers=authenticator.get_auth_header())
+            response = requests.get(url="https://api.surveymonkey.com/v3/users/me", headers=authenticator.get_auth_header(), timeout=60)
             response.raise_for_status()
             return self._check_scopes(response.json())
         except Exception as e:

@@ -28,7 +28,7 @@ class MyHoursAuthenticator(Oauth2Authenticator):
     def retrieve_refresh_token(self, email: str, password: str):
         t0 = pendulum.now()
         payload = json.dumps({"grantType": "password", "email": email, "password": password, "clientId": "api"})
-        response = requests.post(f"{URL_BASE}/tokens/login", headers=REQUEST_HEADERS, data=payload)
+        response = requests.post(f"{URL_BASE}/tokens/login", headers=REQUEST_HEADERS, data=payload, timeout=60)
         response.raise_for_status()
         json_response = response.json()
 
@@ -46,7 +46,7 @@ class MyHoursAuthenticator(Oauth2Authenticator):
 
     def refresh_access_token(self) -> Tuple[str, int]:
         try:
-            response = requests.request(method="POST", url=self._token_refresh_endpoint, data=self.get_refresh_request_body())
+            response = requests.request(method="POST", url=self._token_refresh_endpoint, data=self.get_refresh_request_body(), timeout=60)
             response.raise_for_status()
             response_json = response.json()
             self.refresh_token = response_json["refreshToken"]

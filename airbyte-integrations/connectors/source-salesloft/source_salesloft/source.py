@@ -279,7 +279,7 @@ class SourceSalesloft(AbstractSource):
     def check_connection(self, logger, config) -> Tuple[bool, any]:
         try:
             auth = self._create_authenticator(config)
-            response = requests.get("https://api.salesloft.com/v2/me.json", headers=auth.get_auth_header())
+            response = requests.get("https://api.salesloft.com/v2/me.json", headers=auth.get_auth_header(), timeout=60)
             response.raise_for_status()
             return True, None
         except Exception as e:

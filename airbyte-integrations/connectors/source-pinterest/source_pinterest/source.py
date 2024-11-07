@@ -107,7 +107,7 @@ class SourcePinterest(AbstractSource):
         url = f"{PinterestStream.url_base}user_account"
         try:
             auth_headers = {"Accept": "application/json", **authenticator.get_auth_header()}
-            session = requests.get(url, headers=auth_headers)
+            session = requests.get(url, headers=auth_headers, timeout=60)
             session.raise_for_status()
             return True, None
         except requests.exceptions.HTTPError as e:

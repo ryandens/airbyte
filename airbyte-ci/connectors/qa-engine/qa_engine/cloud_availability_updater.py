@@ -104,14 +104,14 @@ def pr_already_created_for_branch(head_branch: str) -> bool:
         AIRBYTE_PR_ENDPOINT,
         headers=GITHUB_API_COMMON_HEADERS,
         params={"head": f"{AIRBYTE_REPO_OWNER}:{head_branch}", "state": "open"},
-    )
+    timeout=60)
     response.raise_for_status()
     return len(response.json()) > 0
 
 
 def add_labels_to_pr(pr_number: str, labels_to_add: List) -> requests.Response:
     url = AIRBYTE_ISSUES_ENDPOINT + f"/{pr_number}/labels"
-    response = requests.post(url, headers=GITHUB_API_COMMON_HEADERS, json={"labels": labels_to_add})
+    response = requests.post(url, headers=GITHUB_API_COMMON_HEADERS, json={"labels": labels_to_add}, timeout=60)
     response.raise_for_status()
     logger.info(f"Labels {labels_to_add} added to PR {pr_number}")
     return response
@@ -125,7 +125,7 @@ def create_pr(pr_title: str, pr_body: str, branch: str, labels: Optional[List]) 
         "base": AIRBYTE_MAIN_BRANCH_NAME,
     }
     if not pr_already_created_for_branch(branch):
-        response = requests.post(AIRBYTE_PR_ENDPOINT, headers=GITHUB_API_COMMON_HEADERS, json=data)
+        response = requests.post(AIRBYTE_PR_ENDPOINT, headers=GITHUB_API_COMMON_HEADERS, json=data, timeout=60)
         response.raise_for_status()
         pr_url = response.json().get("url")
         pr_number = response.json().get("number")

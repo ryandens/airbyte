@@ -24,7 +24,7 @@ class KyribaClient:
     def login(self) -> TokenAuthenticator:
         data = {"grant_type": "client_credentials"}
         auth = requests.auth.HTTPBasicAuth(self.username, self.password)
-        response = requests.post(self.url, auth=auth, data=data)
+        response = requests.post(self.url, auth=auth, data=data, timeout=60)
         response.raise_for_status()
         self.access_token = response.json()["access_token"]
         return TokenAuthenticator(self.access_token)

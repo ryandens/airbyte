@@ -271,5 +271,5 @@ def test_no_next_page_token(requests_mock):
     stream = Advertisers("2021-01-01", "2021-01-02")
     url = stream.url_base + stream.path()
     requests_mock.get(url, json={"data": {"page_info": {}}})
-    test_response = requests.get(url)
+    test_response = requests.get(url, timeout=60)
     assert stream.next_page_token(test_response) is None

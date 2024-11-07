@@ -78,7 +78,7 @@ class CustomYouniumAuthenticator(NoAuth):
                 url = "https://younium-identity-server.azurewebsites.net/connect/token"
                 # url = "http://localhost:3000/auth/token"
 
-            rest = requests.post(url, headers=headers, data=data)
+            rest = requests.post(url, headers=headers, data=data, timeout=60)
             if rest.status_code != HTTPStatus.OK:
                 raise HTTPError(rest.text)
             return (rest.json().get("access_token"), rest.json().get("token_type"))

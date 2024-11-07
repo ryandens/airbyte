@@ -52,18 +52,18 @@ def _encode_content(text):
 def create_note(stream, headers):
     url = stream.url_base + f"/services/data/{stream.sf_api.version}/sobjects/{stream.name}"
     note_data = {"Title": "Integration Test", "Content": _encode_content(NOTE_CONTENT)}
-    return requests.post(url, headers=headers, json=note_data)
+    return requests.post(url, headers=headers, json=note_data, timeout=60)
 
 
 def delete_note(stream, note_id, headers):
     url = stream.url_base + f"/services/data/{stream.sf_api.version}/sobjects/{stream.name}/{note_id}"
-    return requests.delete(url, headers=headers)
+    return requests.delete(url, headers=headers, timeout=60)
 
 
 def update_note(stream, note_id, headers):
     url = stream.url_base + f"/services/data/{stream.sf_api.version}/sobjects/{stream.name}/{note_id}"
     note_data = {"Content": _encode_content(UPDATED_NOTE_CONTENT)}
-    return requests.patch(url, headers=headers, json=note_data)
+    return requests.patch(url, headers=headers, json=note_data, timeout=60)
 
 
 def get_stream_state():

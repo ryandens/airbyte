@@ -309,7 +309,7 @@ class SourceWeatherstack(AbstractSource):
             query = config["query"]
             access_key = config["access_key"]
 
-            response = requests.get(f"{url_base}/current?access_key={access_key}&query={query}")
+            response = requests.get(f"{url_base}/current?access_key={access_key}&query={query}", timeout=60)
             response = response.text
 
             if response.find('"success": false') != -1:

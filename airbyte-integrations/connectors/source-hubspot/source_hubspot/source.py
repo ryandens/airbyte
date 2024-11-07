@@ -90,7 +90,7 @@ class SourceHubspot(AbstractSource):
         try:
             access_token = authenticator.get_access_token()
             url = f"https://api.hubapi.com/oauth/v1/access-tokens/{access_token}"
-            response = requests.get(url=url)
+            response = requests.get(url=url, timeout=60)
             response.raise_for_status()
             response_json = response.json()
             granted_scopes = response_json["scopes"]

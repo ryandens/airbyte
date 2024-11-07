@@ -6,7 +6,7 @@ import requests
 
 def query_endpoint(endpoint):
     try:
-        response = requests.get("https://" + endpoint)
+        response = requests.get("https://" + endpoint, timeout=60)
         return response
     except requests.exceptions.RequestException as e:
         print(f"Failed to query {endpoint}: {e}")
