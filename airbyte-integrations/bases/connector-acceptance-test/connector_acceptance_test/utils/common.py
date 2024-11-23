@@ -10,6 +10,7 @@ from typing import Iterable, List, MutableMapping, Set, Union
 
 import pytest
 from yaml import load
+import yaml
 
 try:
     from yaml import CLoader as Loader
@@ -34,7 +35,7 @@ def load_config(path: str) -> Config:
         pytest.fail(f"config file {path.absolute()} does not exist")
 
     with open(str(path), "r") as file:
-        data = load(file, Loader=Loader)
+        data = load(file, Loader=yaml.SafeLoader)
         return Config.parse_obj(data)
 
 
@@ -103,7 +104,7 @@ def load_yaml_or_json_path(path: Path):
         if file_ext == ".json":
             return json.loads(file_data)
         elif file_ext == ".yaml":
-            return load(file_data, Loader=Loader)
+            return load(file_data, Loader=yaml.SafeLoader)
         else:
             raise RuntimeError("path must be a '.yaml' or '.json' file")
 

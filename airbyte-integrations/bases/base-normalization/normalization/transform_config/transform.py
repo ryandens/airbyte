@@ -47,7 +47,7 @@ class TransformConfig:
         data = pkgutil.get_data(self.__class__.__module__.split(".")[0], "transform_config/profile_base.yml")
         if not data:
             raise FileExistsError("Failed to load profile_base.yml")
-        base_profile = yaml.load(data, Loader=yaml.FullLoader)
+        base_profile = yaml.load(data, Loader=yaml.SafeLoader)
 
         transformed_integration_config = {
             DestinationType.BIGQUERY.value: self.transform_bigquery,
