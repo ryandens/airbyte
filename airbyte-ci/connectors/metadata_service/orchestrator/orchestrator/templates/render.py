@@ -167,13 +167,13 @@ def get_latest_nightly_report_df(nightly_report_complete_df: pd.DataFrame) -> pd
 
 
 def render_connector_registry_locations_html(destinations_table_html: str, sources_table_html: str) -> str:
-    env = Environment(loader=PackageLoader("orchestrator", "templates"))
+    env = Environment(loader=PackageLoader("orchestrator", "templates"), autoescape=True)
     template = env.get_template("connector_registry_locations.html")
     return template.render(destinations_table_html=destinations_table_html, sources_table_html=sources_table_html)
 
 
 def render_connector_nightly_report_md(nightly_report_connector_matrix_df: pd.DataFrame, nightly_report_complete_df: pd.DataFrame) -> str:
-    env = Environment(loader=PackageLoader("orchestrator", "templates"))
+    env = Environment(loader=PackageLoader("orchestrator", "templates"), autoescape=True)
     template = env.get_template("connector_nightly_report.md")
 
     enhanced_nightly_report_df = enhance_nightly_report(nightly_report_connector_matrix_df)
@@ -207,7 +207,7 @@ def render_connector_nightly_report_md(nightly_report_connector_matrix_df: pd.Da
 
 @deep_copy_params
 def render_connector_test_summary_html(connector_name: str, connector_test_summary_df: pd.DataFrame) -> str:
-    env = Environment(loader=PackageLoader("orchestrator", "templates"))
+    env = Environment(loader=PackageLoader("orchestrator", "templates"), autoescape=True)
     template = env.get_template("connector_test_summary.html")
     columns_to_show: List[ColumnInfo] = [
         {
