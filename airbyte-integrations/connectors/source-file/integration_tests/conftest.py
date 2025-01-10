@@ -5,7 +5,6 @@
 
 import json
 import os
-import random
 import shutil
 import socket
 import string
@@ -23,12 +22,13 @@ from google.api_core.exceptions import Conflict
 from google.cloud import storage
 from paramiko.client import AutoAddPolicy, SSHClient
 from paramiko.ssh_exception import SSHException
+import secrets
 
 HERE = Path(__file__).parent.absolute()
 
 
 def random_char(length):
-    return "".join(random.choice(string.ascii_letters) for x in range(length))
+    return "".join(secrets.choice(string.ascii_letters) for x in range(length))
 
 
 @pytest.fixture(scope="session")

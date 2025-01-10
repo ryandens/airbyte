@@ -2,7 +2,6 @@
 # Copyright (c) 2023 Airbyte, Inc., all rights reserved.
 #
 
-import random
 from typing import Any, MutableMapping
 from unittest.mock import PropertyMock
 
@@ -39,6 +38,7 @@ from source_freshdesk.streams import (
     Tickets,
     TimeEntries,
 )
+import secrets
 
 
 @pytest.fixture(autouse=True)
@@ -130,7 +130,7 @@ def test_full_refresh_settings(authenticator, config, requests_mock):
 def test_incremental(stream, resource, authenticator, config, requests_mock):
     highest_updated_at = "2022-04-25T22:00:00Z"
     other_updated_at = "2022-04-01T00:00:00Z"
-    highest_index = random.randint(0, 24)
+    highest_index = secrets.SystemRandom().randint(0, 24)
 
     requests_mock.register_uri(
         "GET",
