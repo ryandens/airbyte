@@ -3,7 +3,6 @@
 #
 
 import logging
-import random
 import string
 from typing import Any, Dict, Iterable, Mapping
 
@@ -16,6 +15,7 @@ from botocore.exceptions import ClientError, InvalidRegionError
 from .aws import AwsHandler
 from .config_reader import ConnectorConfig
 from .stream_writer import StreamWriter
+import secrets
 
 logger = logging.getLogger("airbyte")
 
@@ -30,7 +30,7 @@ class DestinationAwsDatalake(Destination):
 
     @staticmethod
     def _get_random_string(length):
-        return "".join(random.choice(string.ascii_letters) for i in range(length))
+        return "".join(secrets.choice(string.ascii_letters) for i in range(length))
 
     def write(
         self, config: Mapping[str, Any], configured_catalog: ConfiguredAirbyteCatalog, input_messages: Iterable[AirbyteMessage]

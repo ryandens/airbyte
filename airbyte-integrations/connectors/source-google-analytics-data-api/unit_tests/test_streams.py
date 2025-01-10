@@ -3,7 +3,6 @@
 #
 
 import datetime
-import random
 from http import HTTPStatus
 from typing import Any, Mapping
 from unittest.mock import MagicMock
@@ -13,12 +12,13 @@ from freezegun import freeze_time
 from source_google_analytics_data_api.source import GoogleAnalyticsDataApiBaseStream
 
 from .utils import read_incremental
+import secrets
 
 
 @pytest.fixture
 def patch_base_class(mocker, config, config_without_date_range):
     # Mock abstract methods to enable instantiating abstract class
-    mocker.patch.object(GoogleAnalyticsDataApiBaseStream, "path", f"{random.randint(100000000, 999999999)}:runReport")
+    mocker.patch.object(GoogleAnalyticsDataApiBaseStream, "path", f"{secrets.SystemRandom().randint(100000000, 999999999)}:runReport")
     mocker.patch.object(GoogleAnalyticsDataApiBaseStream, "primary_key", "test_primary_key")
     mocker.patch.object(GoogleAnalyticsDataApiBaseStream, "__abstractmethods__", set())
 

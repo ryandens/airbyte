@@ -3,7 +3,6 @@
 #
 
 import json
-import random
 import string
 import tempfile
 import time
@@ -18,6 +17,7 @@ from airbyte_protocol.models import AirbyteStream, ConfiguredAirbyteCatalog, Con
 from connector_acceptance_test.config import EmptyStreamConfiguration
 from connector_acceptance_test.utils import common
 from connector_acceptance_test.utils.compare import make_hashable
+import secrets
 
 
 def not_sorted_data():
@@ -193,9 +193,9 @@ class MockContainer:
 def binary_generator(lengths, last_line=None):
     data = ""
     for length in lengths:
-        data += "".join(random.choice(string.ascii_uppercase + string.digits) for _ in range(length)) + "\n"
+        data += "".join(secrets.choice(string.ascii_uppercase + string.digits) for _ in range(length)) + "\n"
     data = data.encode()
-    chunk_size = random.randint(2, 32)
+    chunk_size = secrets.SystemRandom().randint(2, 32)
 
     while len(data) > chunk_size:
         yield data[:chunk_size]

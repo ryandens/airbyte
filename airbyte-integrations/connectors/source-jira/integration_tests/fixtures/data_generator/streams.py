@@ -3,7 +3,6 @@
 #
 
 import json
-import random
 import string
 from typing import Any, Mapping, Optional
 
@@ -30,6 +29,7 @@ from source_jira.streams import (
     Workflows,
     WorkflowSchemes,
 )
+import secrets
 
 
 class GeneratorMixin:
@@ -86,8 +86,8 @@ class FilterSharingGenerator(FilterSharing, GeneratorMixin):
     def generate(self):
         filters_stream = Filters(authenticator=self.authenticator, domain=self._domain)
         for filters in filters_stream.read_records(sync_mode=SyncMode.full_refresh):
-            for index in range(random.randrange(4)):
-                group_name = random.choice(["Test group 0", "Test group 1", "Test group 2"])
+            for index in range(secrets.SystemRandom().randrange(4)):
+                group_name = secrets.choice(["Test group 0", "Test group 1", "Test group 2"])
                 payload = json.dumps({"type": "group", "groupname": group_name})
                 self.generate_record(payload, stream_slice={"filter_id": filters["id"]})
 
@@ -122,8 +122,8 @@ class IssuesGenerator(Issues, GeneratorMixin):
             payload = json.dumps(
                 {
                     "fields": {
-                        "project": {"key": random.choice(projects)},
-                        "issuetype": {"id": random.choice(issue_types)},
+                        "project": {"key": secrets.choice(projects)},
+                        "issuetype": {"id": secrets.choice(issue_types)},
                         "summary": f"Test {index}",
                         "description": {
                             "type": "doc",
@@ -177,7 +177,7 @@ class IssueFieldsGenerator(IssueFields, GeneratorMixin):
     """
 
     def generate(self):
-        for index in range(1, random.randrange(2, 11)):
+        for index in range(1, secrets.SystemRandom().randrange(2, 11)):
             payload = json.dumps(
                 {
                     "searcherKey": "com.atlassian.jira.plugin.system.customfieldtypes:grouppickersearcher",
@@ -253,10 +253,10 @@ class IssueWorklogsGenerator(IssueWorklogs, GeneratorMixin):
     def generate(self):
         issues_stream = Issues(authenticator=self.authenticator, domain=self._domain)
         for issue in issues_stream.read_records(sync_mode=SyncMode.full_refresh):
-            for index in range(random.randrange(1, 6)):
+            for index in range(secrets.SystemRandom().randrange(1, 6)):
                 payload = json.dumps(
                     {
-                        "timeSpentSeconds": random.randrange(600, 12000),
+                        "timeSpentSeconds": secrets.SystemRandom().randrange(600, 12000),
                         "comment": {
                             "type": "doc",
                             "version": 1,
@@ -314,7 +314,7 @@ class ProjectComponentsGenerator(ProjectComponents, GeneratorMixin):
     def generate(self):
         projects_stream = Projects(authenticator=self.authenticator, domain=self._domain)
         for project in projects_stream.read_records(sync_mode=SyncMode.full_refresh):
-            for index in range(random.randrange(6)):
+            for index in range(secrets.SystemRandom().randrange(6)):
                 payload = json.dumps(
                     {
                         "isAssigneeTypeValid": False,
@@ -339,7 +339,7 @@ class ProjectVersionsGenerator(ProjectVersions, GeneratorMixin):
     def generate(self):
         projects_stream = Projects(authenticator=self.authenticator, domain=self._domain)
         for project in projects_stream.read_records(sync_mode=SyncMode.full_refresh):
-            for index in range(random.randrange(6)):
+            for index in range(secrets.SystemRandom().randrange(6)):
                 payload = json.dumps(
                     {
                         "archived": False,
@@ -375,7 +375,7 @@ class UsersGenerator(Users, GeneratorMixin):
     def generate(self):
         for index in range(50):
             letters = string.ascii_lowercase
-            password = "".join(random.choice(letters) for i in range(12))
+            password = "".join(secrets.choice(letters) for i in range(12))
             payload = json.dumps(
                 {
                     "password": password,
