@@ -412,7 +412,7 @@ class DbtIntegrationTest(object):
                 if os.path.exists(message_file):
                     with open(message_file, "rb") as input_data:
                         while True:
-                            line = input_data.readline()
+                            line = input_data.readline(5_000_000)
                             if not line:
                                 break
                             if not line.startswith(b"//"):

@@ -30,7 +30,7 @@ def check_migration_guide(connector: Connector) -> bool:
     expected_title = f"# {connector.name_from_metadata} Migration Guide"
     expected_version_header_start = "## Upgrading to "
     with open(migration_guide_file_path) as f:
-        first_line = f.readline().strip()
+        first_line = f.readline(5_000_000).strip()
         if not first_line == expected_title:
             print(
                 f"Migration guide file for {connector.technical_name} does not start with the correct header. Expected '{expected_title}', got '{first_line}'"
