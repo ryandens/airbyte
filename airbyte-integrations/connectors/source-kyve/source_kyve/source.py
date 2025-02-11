@@ -24,7 +24,7 @@ class SourceKyve(AbstractSource):
         for pool_id in pools:
             try:
                 # check if endpoint is available and returns valid data
-                response = requests.get(f"{config['url_base']}/kyve/query/v1beta1/pool/{pool_id}")
+                response = requests.get(f"{config['url_base']}/kyve/query/v1beta1/pool/{pool_id}", timeout=60)
                 if not response.ok:
                     # todo improve error handling for cases like pool not found
                     return False, response.json()
@@ -40,7 +40,7 @@ class SourceKyve(AbstractSource):
         start_ids = config.get("start_ids").split(",")
 
         for (pool_id, start_id) in zip(pools, start_ids):
-            response = requests.get(f"{config['url_base']}/kyve/query/v1beta1/pool/{pool_id}")
+            response = requests.get(f"{config['url_base']}/kyve/query/v1beta1/pool/{pool_id}", timeout=60)
             pool_data = response.json().get("pool").get("data")
 
             config_copy = dict(deepcopy(config))

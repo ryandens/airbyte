@@ -68,7 +68,7 @@ def do_request(config: Mapping[str, Any], path: str):
     return requests.get(
         config["url"] + "/api/data/v9.2/" + path,
         headers=headers,
-    )
+    timeout=60)
 
 
 def convert_dataverse_type(dataverse_type: str) -> Optional[dict]:

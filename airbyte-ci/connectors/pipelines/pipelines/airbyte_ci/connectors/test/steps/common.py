@@ -37,7 +37,7 @@ class VersionCheck(Step, ABC):
 
     @cached_property
     def master_metadata(self) -> Optional[dict]:
-        response = requests.get(self.github_master_metadata_url)
+        response = requests.get(self.github_master_metadata_url, timeout=60)
 
         # New connectors will not have a metadata file in master
         if not response.ok:

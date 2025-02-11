@@ -170,10 +170,10 @@ def test_processed_orders_request_body_data(patch_incremental_base_class, page_n
 
 def test_processed_orders_paged_result(patch_incremental_base_class, requests_mock):
     requests_mock.get("https://dummy", json={"ProcessedOrders": "the_orders"})
-    good_response = requests.get("https://dummy")
+    good_response = requests.get("https://dummy", timeout=60)
 
     requests_mock.get("https://dummy", json={"OtherData": "the_data"})
-    bad_response = requests.get("https://dummy")
+    bad_response = requests.get("https://dummy", timeout=60)
 
     stream = ProcessedOrders()
     result = stream.paged_result(good_response)
@@ -185,10 +185,10 @@ def test_processed_orders_paged_result(patch_incremental_base_class, requests_mo
 
 def test_processed_orders_parse_response(patch_incremental_base_class, requests_mock):
     requests_mock.get("https://dummy", json={"ProcessedOrders": {"Data": [1, 2, 3]}})
-    good_response = requests.get("https://dummy")
+    good_response = requests.get("https://dummy", timeout=60)
 
     requests_mock.get("https://dummy", json={"ProcessedOrders": {"OtherData": [1, 2, 3]}})
-    bad_response = requests.get("https://dummy")
+    bad_response = requests.get("https://dummy", timeout=60)
 
     stream = ProcessedOrders()
     result = stream.parse_response(good_response)

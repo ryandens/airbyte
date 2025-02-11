@@ -66,19 +66,19 @@ def test_request_params(stream):
 def test_next_page_token(stream, requests_mock):
     # No results
     requests_mock.get("https://dummy", json={"TotalResults": 0, "CollectionField": []})
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     expected_next_page_token = None
     assert stream.next_page_token(resp) == expected_next_page_token
 
     # Invalid response
     requests_mock.get("https://dummy", json={"TotalResults": 1000, "CollectionField": []})
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     expected_next_page_token = None
     assert stream.next_page_token(resp) == expected_next_page_token
 
     # Implicit page size
     requests_mock.get("https://dummy", json={"TotalResults": 1000, "CollectionField": [None, None, None]})
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     expected_next_page_token = {"pgsiz": 3, "pgnum": 2}
     assert stream.next_page_token(resp) == expected_next_page_token
 
@@ -86,7 +86,7 @@ def test_next_page_token(stream, requests_mock):
 def test_next_page_token_with_page_size(patch_base_class_page_size, stream, requests_mock):
     # Explicit page size
     requests_mock.get("https://dummy", json={"TotalResults": 1000, "CollectionField": []})
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     expected_next_page_token = {"pgsiz": 10, "pgnum": 2}
     assert stream.next_page_token(resp) == expected_next_page_token
 
@@ -107,7 +107,7 @@ def test_parse_response(stream, requests_mock):
             ],
         },
     )
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     inputs = {"response": resp}
     expected_parsed_object = {"Bar": {"Baz": "baz"}, "Foo": "foo"}
     assert next(stream.parse_response(**inputs)) == expected_parsed_object
@@ -127,7 +127,7 @@ def test_parse_response_with_primary_key(patch_base_class_upstream_primary_key, 
             ],
         },
     )
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     inputs = {"response": resp}
     expected_parsed_object = {"Nested": {"PrimaryKey": 42}, "test_primary_key": 42}
     assert next(stream.parse_response(**inputs)) == expected_parsed_object
@@ -147,7 +147,7 @@ def test_parse_response_with_cursor_field(patch_base_class_upstream_cursor_field
             ],
         },
     )
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     inputs = {"response": resp}
     expected_parsed_object = {"Nested": {"Cursor": 43}, "test_cursor_field": 43}
     assert next(stream.parse_response(**inputs)) == expected_parsed_object

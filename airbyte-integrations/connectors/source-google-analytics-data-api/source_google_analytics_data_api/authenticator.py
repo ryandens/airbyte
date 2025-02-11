@@ -56,7 +56,7 @@ class GoogleServiceKeyAuthenticator(requests.auth.AuthBase):
     def _rotate(self):
         if self._token_expired():
             try:
-                response = requests.request(method="POST", url=self._google_oauth2_token_endpoint, params=self._get_signed_payload()).json()
+                response = requests.request(method="POST", url=self._google_oauth2_token_endpoint, params=self._get_signed_payload(), timeout=60).json()
             except requests.exceptions.RequestException as e:
                 raise Exception(f"Error refreshing access token: {e}") from e
             self._token = dict(

@@ -42,8 +42,8 @@ class AuthenticatorFacebookPageAccessToken(NoAuth):
         # https://developers.facebook.com/docs/pages/access-tokens#get-a-page-access-token
         try:
             r = requests.get(
-                f"https://graph.facebook.com/{self._page_id}", params={"fields": "access_token", "access_token": self._access_token}
-            )
+                f"https://graph.facebook.com/{self._page_id}", params={"fields": "access_token", "access_token": self._access_token}, 
+            timeout=60)
             if r.status_code != HTTPStatus.OK:
                 raise HTTPError(r.text)
             return r.json().get("access_token")

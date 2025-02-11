@@ -305,7 +305,7 @@ class SearchMetricsAuthenticator(Oauth2Authenticator):
                 url=self.token_refresh_endpoint,
                 headers=self.get_refresh_request_headers(),
                 data=self.get_refresh_request_body(),
-            )
+            timeout=60)
             response.raise_for_status()
             response_json = response.json()
             return response_json["access_token"], response_json["expires_in"]
@@ -325,7 +325,7 @@ class SourceSearchMetrics(AbstractSource):
             url = "https://api.searchmetrics.com/v4/AdminStatusGetListProjects.json"
 
             auth_headers = {"Accept": "application/json", **authenticator.get_auth_header()}
-            session = requests.get(url, headers=auth_headers)
+            session = requests.get(url, headers=auth_headers, timeout=60)
             session.raise_for_status()
 
             return True, None

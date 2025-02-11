@@ -24,7 +24,7 @@ class QAReportGenerationError(Exception):
 
 
 def url_is_reachable(url: str) -> bool:
-    response = requests.get(url)
+    response = requests.get(url, timeout=60)
     return response.status_code == 200
 
 

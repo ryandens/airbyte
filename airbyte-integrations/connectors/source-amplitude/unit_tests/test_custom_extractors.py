@@ -116,7 +116,7 @@ class TestEventsExtractor:
         with open(f"{os.path.dirname(__file__)}/{file_name}", "rb") as zipped:
             url = "https://amplitude.com/"
             requests_mock.get(url, content=zipped.read())
-            response = requests.get(url)
+            response = requests.get(url, timeout=60)
             assert list(self.extractor.extract_records(response)) == expected_records
 
     def test_event_read(self, requests_mock):

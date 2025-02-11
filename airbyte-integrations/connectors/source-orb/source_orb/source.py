@@ -698,7 +698,7 @@ class SourceOrb(AbstractSource):
         """
         auth_header = TokenAuthenticator(token=config["api_key"]).get_auth_header()
         ping_url = ORB_API_BASE_URL + "ping"
-        ping_response = requests.get(ping_url, headers=auth_header)
+        ping_response = requests.get(ping_url, headers=auth_header, timeout=60)
         try:
             ping_response.raise_for_status()
             return True, None

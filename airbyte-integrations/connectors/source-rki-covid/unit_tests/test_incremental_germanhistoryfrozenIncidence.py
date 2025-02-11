@@ -36,7 +36,7 @@ def test_get_updated_state(patch_incremental_german_history_frozenInc):
 def test_parse_response(patch_incremental_german_history_frozenInc):
     config = {"start_date": "2022-04-27"}
     stream = GermanHistoryFrozenIncidence(config)
-    response = requests.get("https://api.corona-zahlen.org/germany/history/frozen-incidence/1")
+    response = requests.get("https://api.corona-zahlen.org/germany/history/frozen-incidence/1", timeout=60)
     if response.json().get("data").get("history"):
         expected_response = response.json().get("data").get("history")
         assert stream.parse_response(response) == expected_response

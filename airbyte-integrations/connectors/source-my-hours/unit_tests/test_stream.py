@@ -28,7 +28,7 @@ def test_next_page_token(patch_base_class):
 def test_parse_response(patch_base_class, requests_mock):
     stream = MyHoursStream()
     requests_mock.get("https://dummy", json=[{"name": "test"}])
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     inputs = {"response": resp}
     expected_parsed_object = {"name": "test"}
     assert next(stream.parse_response(**inputs)) == expected_parsed_object

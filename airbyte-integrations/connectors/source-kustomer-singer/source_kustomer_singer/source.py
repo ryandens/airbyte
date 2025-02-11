@@ -31,7 +31,7 @@ class SourceKustomerSinger(SingerSource):
         headers = {"Authorization": f"Bearer {config['api_token']}"}
 
         try:
-            session = requests.get(url, headers=headers)
+            session = requests.get(url, headers=headers, timeout=60)
             session.raise_for_status()
             return AirbyteConnectionStatus(status=Status.SUCCEEDED)
         except requests.exceptions.RequestException as e:

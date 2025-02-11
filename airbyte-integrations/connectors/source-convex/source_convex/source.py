@@ -44,7 +44,7 @@ class SourceConvex(AbstractSource):
             "Authorization": f"Convex {access_key}",
             "Convex-Client": f"airbyte-export-{CONVEX_CLIENT_VERSION}",
         }
-        return requests.get(url, headers=headers)
+        return requests.get(url, headers=headers, timeout=60)
 
     def check_connection(self, logger: Any, config: Mapping[str, Any]) -> Tuple[bool, Any]:
         """

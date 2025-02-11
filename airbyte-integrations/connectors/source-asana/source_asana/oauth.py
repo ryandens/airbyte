@@ -30,7 +30,7 @@ class AsanaOauth2Authenticator(Oauth2Authenticator):
             "refresh_token": (None, self.refresh_token),
         }
 
-        response = requests.post(self.token_refresh_endpoint, files=data)
+        response = requests.post(self.token_refresh_endpoint, files=data, timeout=60)
         response.raise_for_status()
         response_body = response.json()
         return response_body["access_token"], response_body["expires_in"]

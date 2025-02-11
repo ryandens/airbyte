@@ -29,7 +29,7 @@ class Helpers(object):
     def get_views(auth: TokenAuthenticator, grid_id: str) -> Dict[str, Any]:
         url = Helpers.view_list_url(grid_id)
         try:
-            response = requests.get(url, headers=auth.get_auth_header())
+            response = requests.get(url, headers=auth.get_auth_header(), timeout=60)
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 401:
@@ -45,7 +45,7 @@ class Helpers(object):
     def get_grid(auth: TokenAuthenticator, grid_id: str) -> Dict[str, Any]:
         url = Helpers.grid_detail_url(grid_id)
         try:
-            response = requests.get(url, headers=auth.get_auth_header())
+            response = requests.get(url, headers=auth.get_auth_header(), timeout=60)
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 401:
@@ -60,7 +60,7 @@ class Helpers(object):
     def get_view(auth: TokenAuthenticator, view_id: str) -> Dict[str, Any]:
         url = Helpers.view_detail_url(view_id)
         try:
-            response = requests.get(url, headers=auth.get_auth_header())
+            response = requests.get(url, headers=auth.get_auth_header(), timeout=60)
             response.raise_for_status()
         except requests.exceptions.HTTPError as e:
             if e.response.status_code == 401:

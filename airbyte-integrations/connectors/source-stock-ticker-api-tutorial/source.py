@@ -82,7 +82,7 @@ def _call_api(ticker, token):
     today = date.today()
     to_day = today.strftime("%Y-%m-%d")
     from_day = (today - timedelta(days=7)).strftime("%Y-%m-%d")
-    return requests.get(f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{from_day}/{to_day}?sort=asc&limit=120&apiKey={token}")
+    return requests.get(f"https://api.polygon.io/v2/aggs/ticker/{ticker}/range/1/day/{from_day}/{to_day}?sort=asc&limit=120&apiKey={token}", timeout=60)
 
 
 def check(config):

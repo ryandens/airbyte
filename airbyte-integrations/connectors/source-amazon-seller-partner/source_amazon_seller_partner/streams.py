@@ -254,7 +254,7 @@ class ReportsAmazonSPStream(HttpStream, ABC):
         """
         Unpacks a report document
         """
-        report = requests.get(payload.get("url"))
+        report = requests.get(payload.get("url"), timeout=60)
         report.raise_for_status()
         if "compressionAlgorithm" in payload:
             return gzip.decompress(report.content).decode("iso-8859-1")

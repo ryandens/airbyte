@@ -39,7 +39,7 @@ response = requests.request(
     data=data,
     headers=headers,
     auth=(client_id, secret),
-)
+timeout=60)
 response_json = response.json()
 print(response_json)
 API_TOKEN = response_json["access_token"]
@@ -84,6 +84,6 @@ response = requests.get(
     url,
     headers=headers,
     params=params,
-)
+timeout=60)
 
 pprint(response.json())

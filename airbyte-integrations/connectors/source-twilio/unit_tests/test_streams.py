@@ -96,7 +96,7 @@ class TestTwilioStream:
         stream = stream_cls(**self.CONFIG)
         url = f"{stream.url_base}{stream.path()}"
         requests_mock.get(url, json=test_response)
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         result = stream.next_page_token(response)
         assert result == expected
 
@@ -111,7 +111,7 @@ class TestTwilioStream:
           stream = stream_cls(**self.CONFIG)
           url = f"{stream.url_base}{stream.path()}"
           requests_mock.get(url, json=test_response)
-          response = requests.get(url)
+          response = requests.get(url, timeout=60)
           result = list(stream.parse_response(response))
           assert result[0]['id'] == expected[0]['id']
 
@@ -126,7 +126,7 @@ class TestTwilioStream:
         url = f"{stream.url_base}{stream.path()}"
         test_headers = {"Retry-After": expected}
         requests_mock.get(url, headers=test_headers)
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         result = stream.backoff_time(response)
         assert result == float(expected)
 

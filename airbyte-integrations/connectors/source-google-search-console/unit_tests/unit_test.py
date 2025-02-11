@@ -126,7 +126,7 @@ def test_forbidden_should_retry(requests_mock, forbidden_error_message_json):
     slice = list(stream.stream_slices(None))[0]
     url = stream.url_base + stream.path(None, slice)
     requests_mock.get(url, status_code=403, json=forbidden_error_message_json)
-    test_response = requests.get(url)
+    test_response = requests.get(url, timeout=60)
     assert stream.should_retry(test_response) is False
     assert stream.raise_on_http_errors is False
 
@@ -136,7 +136,7 @@ def test_bad_aggregation_type_should_retry(requests_mock, bad_aggregation_type):
     slice = list(stream.stream_slices(None))[0]
     url = stream.url_base + stream.path(None, slice)
     requests_mock.get(url, status_code=400, json=bad_aggregation_type)
-    test_response = requests.get(url)
+    test_response = requests.get(url, timeout=60)
     # before should_retry, the aggregation_type should be set to `by_propety`
     assert stream.aggregation_type == QueryAggregationType.by_property
     # trigger should retry

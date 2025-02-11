@@ -10,7 +10,7 @@ from pipelines import main_logger
 
 def send_message_to_webhook(message: str, channel: str, webhook: str) -> dict:
     payload = {"channel": f"#{channel}", "username": "Connectors CI/CD Bot", "text": message}
-    response = requests.post(webhook, data={"payload": json.dumps(payload)})
+    response = requests.post(webhook, data={"payload": json.dumps(payload)}, timeout=60)
 
     # log if the request failed, but don't fail the pipeline
     if not response.ok:

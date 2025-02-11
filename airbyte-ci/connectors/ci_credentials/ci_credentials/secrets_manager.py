@@ -290,7 +290,7 @@ class SecretsManager:
         return new_remote_secrets
 
     def _get_spec_mask(self) -> List[str]:
-        response = requests.get(self.SPEC_MASK_URL, allow_redirects=True)
+        response = requests.get(self.SPEC_MASK_URL, allow_redirects=True, timeout=60)
         if not response.ok:
             self.logger.error(f"Failed to fetch spec mask: {response.content}")
         try:
