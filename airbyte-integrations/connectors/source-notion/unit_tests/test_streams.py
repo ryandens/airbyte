@@ -32,7 +32,7 @@ def test_request_params(patch_base_class):
 def test_next_page_token(patch_base_class, requests_mock):
     stream = NotionStream(config=MagicMock())
     requests_mock.get("https://dummy", json={"next_cursor": "aaa"})
-    inputs = {"response": requests.get("https://dummy")}
+    inputs = {"response": requests.get("https://dummy", timeout=60)}
     expected_token = {"next_cursor": "aaa"}
     assert stream.next_page_token(**inputs) == expected_token
 
@@ -52,7 +52,7 @@ def test_next_page_token_with_no_cursor(patch_base_class, response_json, expecte
 def test_parse_response(patch_base_class, requests_mock):
     stream = NotionStream(config=MagicMock())
     requests_mock.get("https://dummy", json={"results": [{"a": 123}, {"b": "xx"}]})
-    resp = requests.get("https://dummy")
+    resp = requests.get("https://dummy", timeout=60)
     inputs = {"response": resp, "stream_state": MagicMock()}
     expected_parsed_object = [{"a": 123}, {"b": "xx"}]
     assert list(stream.parse_response(**inputs)) == expected_parsed_object
@@ -98,7 +98,7 @@ def test_should_not_retry_with_ai_block(requests_mock):
         "message": "Block type ai_block is not supported via the API.",
     }
     requests_mock.get("https://api.notion.com/v1/blocks/123", json=json_response, status_code=400)
-    test_response = requests.get("https://api.notion.com/v1/blocks/123")
+    test_response = requests.get("https://api.notion.com/v1/blocks/123", timeout=60)
     assert not stream.should_retry(test_response)
 
 
@@ -110,7 +110,7 @@ def test_should_not_retry_with_not_found_block(requests_mock):
         "message": "Not Found for url: https://api.notion.com/v1/blocks/123/children?page_size=100",
     }
     requests_mock.get("https://api.notion.com/v1/blocks/123", json=json_response, status_code=404)
-    test_response = requests.get("https://api.notion.com/v1/blocks/123")
+    test_response = requests.get("https://api.notion.com/v1/blocks/123", timeout=60)
     assert not stream.should_retry(test_response)
 
 
@@ -307,7 +307,7 @@ def test_request_throttle(initial_page_size, expected_page_size, mock_response, 
 
     stream = Users(config={"authenticator": "auth"})
     stream.page_size = initial_page_size
-    response = requests.get("https://api.notion.com/v1/users")
+    response = requests.get("https://api.notion.com/v1/users", timeout=60)
 
     stream.should_retry(response=response)
 

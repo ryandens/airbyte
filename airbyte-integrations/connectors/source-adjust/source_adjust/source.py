@@ -185,7 +185,7 @@ class SourceAdjust(AbstractSource):
         requests.get(
             url=self.check_endpoint,
             headers={"Authorization": f'Bearer {config["api_token"]:s}'},
-        ).raise_for_status()
+        timeout=60).raise_for_status()
         return True, None  # Are we coding in go?
 
     def streams(self, config: Mapping[str, Any]) -> List[Stream]:

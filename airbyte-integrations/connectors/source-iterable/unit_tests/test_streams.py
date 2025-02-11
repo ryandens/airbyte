@@ -87,7 +87,7 @@ def test_templates_parse_response():
             status=200,
             content_type="application/json",
         )
-        resp = requests.get("https://api.iterable.com/api/1/foobar")
+        resp = requests.get("https://api.iterable.com/api/1/foobar", timeout=60)
 
         records = stream.parse_response(response=resp)
 
@@ -104,7 +104,7 @@ def test_list_users_parse_response():
             status=200,
             content_type="application/json",
         )
-        resp = requests.get("https://api.iterable.com/lists/getUsers?listId=100")
+        resp = requests.get("https://api.iterable.com/lists/getUsers?listId=100", timeout=60)
 
         records = stream.parse_response(response=resp)
 
@@ -125,7 +125,7 @@ def test_campaigns_metrics_parse_response():
             status=200,
             content_type="application/json",
         )
-        resp = requests.get("https://api.iterable.com/lists/getUsers?listId=100")
+        resp = requests.get("https://api.iterable.com/lists/getUsers?listId=100", timeout=60)
 
         records = stream.parse_response(response=resp)
 
@@ -145,7 +145,7 @@ def test_iterable_stream_parse_response():
             status=200,
             content_type="application/json",
         )
-        resp = requests.get("https://api.iterable.com/lists/getUsers?listId=100")
+        resp = requests.get("https://api.iterable.com/lists/getUsers?listId=100", timeout=60)
 
         records = stream.parse_response(response=resp)
 

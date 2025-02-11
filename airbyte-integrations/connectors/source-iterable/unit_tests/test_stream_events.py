@@ -191,7 +191,7 @@ def test_events_parse_response(response_objects, expected_objects, jsonl_body):
     else:
         response_body = json.dumps(response_objects)
     responses.add(responses.GET, "https://example.com", body=response_body)
-    response = requests.get("https://example.com")
+    response = requests.get("https://example.com", timeout=60)
     stream = Events(authenticator=None)
 
     if jsonl_body:

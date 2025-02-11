@@ -26,7 +26,7 @@ class CustomTokenAuthenticator(TokenAuthenticator):
         headers = {"Content-Type": "application/x-www-form-urlencoded"}
         url = f"https://{self._domain}/api/{API_VERSION}/login"
         try:
-            resp = requests.post(url=url, headers=headers, data=f"client_id={self._client_id}&client_secret={self._client_secret}")
+            resp = requests.post(url=url, headers=headers, data=f"client_id={self._client_id}&client_secret={self._client_secret}", timeout=60)
             if resp.status_code != 200:
                 return "Unable to connect to the Looker API. Please check your credentials."
         except ConnectionError as error:

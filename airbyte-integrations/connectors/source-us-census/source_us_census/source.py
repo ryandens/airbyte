@@ -188,7 +188,7 @@ class SourceUsCensus(AbstractSource):
                 config.get("query_params"),
                 config.get("api_key"),
             )
-            resp = requests.get(f"{UsCensusStream.url_base}{config.get('query_path')}", params=params)
+            resp = requests.get(f"{UsCensusStream.url_base}{config.get('query_path')}", params=params, timeout=60)
             status = resp.status_code
             logger.info(f"Ping response code: {status}")
 

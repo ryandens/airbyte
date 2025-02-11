@@ -43,7 +43,7 @@ class AirtableOAuth(SingleUseRefreshTokenOauth2Authenticator):
             url=self.get_token_refresh_endpoint(),
             data=self.build_refresh_request_body(),
             headers=self.build_refresh_request_headers(),
-        )
+        timeout=60)
         content = response.json()
         if response.status_code == 400 and content.get("error") == "invalid_grant":
             raise AirbyteTracedException(

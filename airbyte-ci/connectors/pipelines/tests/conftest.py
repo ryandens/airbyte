@@ -35,7 +35,7 @@ async def dagger_client(dagger_connection):
 
 @pytest.fixture(scope="session")
 def oss_registry():
-    response = requests.get("https://connectors.airbyte.com/files/registries/v0/oss_registry.json")
+    response = requests.get("https://connectors.airbyte.com/files/registries/v0/oss_registry.json", timeout=60)
     response.raise_for_status()
     return response.json()
 

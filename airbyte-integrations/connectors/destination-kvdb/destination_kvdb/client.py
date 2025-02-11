@@ -72,7 +72,7 @@ class KvDbClient:
         url = self._get_base_url() + (endpoint or "")
         headers = {"Accept": "application/json", **self._get_auth_headers()}
 
-        response = requests.request(method=http_method, params=params, url=url, headers=headers, json=json)
+        response = requests.request(method=http_method, params=params, url=url, headers=headers, json=json, timeout=60)
 
         response.raise_for_status()
         return response

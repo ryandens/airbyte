@@ -37,7 +37,7 @@ class TalkdeskAuth:
                 "POST",
                 url=self.auth_url,
                 headers=headers,
-            )
+            timeout=60)
         except Exception as exc:
             raise exc
 

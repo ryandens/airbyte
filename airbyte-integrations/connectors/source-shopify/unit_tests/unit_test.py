@@ -24,7 +24,7 @@ def test_get_next_page_token(requests_mock, auth_config):
     }
 
     requests_mock.get("https://test.myshopify.com/", headers=response_header_links)
-    response = requests.get("https://test.myshopify.com/")
+    response = requests.get("https://test.myshopify.com/", timeout=60)
 
     test = stream.next_page_token(response=response)
     assert test == expected_output_token
@@ -73,7 +73,7 @@ def test_unavailable_stream(requests_mock, basic_config, stream, slice, status, 
     stream = stream(config)
     url = stream.url_base + stream.path(stream_slice=slice)
     requests_mock.get(url=url, json=json_response, status_code=status)
-    response = requests.get(url)
+    response = requests.get(url, timeout=60)
     assert stream.should_retry(response) is expected_output
 
 

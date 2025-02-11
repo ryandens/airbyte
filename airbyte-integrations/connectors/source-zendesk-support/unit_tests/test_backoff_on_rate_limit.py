@@ -41,7 +41,7 @@ def test_backoff(requests_mock, config, x_rate_limit, retry_after, expected):
 
     url = f"{test_stream.url_base}{test_stream.path()}/count.json"
     requests_mock.get(url, json=test_response_json, headers=test_response_header, status_code=429)
-    test_response = requests.get(url)
+    test_response = requests.get(url, timeout=60)
 
     actual = test_stream.backoff_time(test_response)
     assert actual == expected

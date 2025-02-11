@@ -125,7 +125,7 @@ class DestinationConvex(Destination):
         access_key = config["access_key"]
         url = f"{deployment_url}/version"
         headers = {"Authorization": f"Convex {access_key}"}
-        resp = requests.get(url, headers=headers)
+        resp = requests.get(url, headers=headers, timeout=60)
         if resp.status_code == 200:
             return AirbyteConnectionStatus(status=Status.SUCCEEDED)
         else:

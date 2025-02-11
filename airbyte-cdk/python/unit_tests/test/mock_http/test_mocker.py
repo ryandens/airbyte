@@ -25,7 +25,7 @@ class HttpMockerTest(TestCase):
             HttpResponse(_A_BODY, 474),
         )
 
-        response = requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS)
+        response = requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS, timeout=60)
 
         assert response.text == _A_BODY
         assert response.status_code == 474
@@ -37,8 +37,8 @@ class HttpMockerTest(TestCase):
             [HttpResponse(_A_BODY, 1), HttpResponse(_ANOTHER_BODY, 2)],
         )
 
-        first_response = requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS)
-        second_response = requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS)
+        first_response = requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS, timeout=60)
+        second_response = requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS, timeout=60)
 
         assert first_response.text == _A_BODY
         assert first_response.status_code == 1
@@ -52,7 +52,7 @@ class HttpMockerTest(TestCase):
             [HttpResponse(_A_BODY, 1), HttpResponse(_ANOTHER_BODY, 2)],
         )
 
-        last_response = [requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS) for _ in range(10)][-1]
+        last_response = [requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS, timeout=60) for _ in range(10)][-1]
 
         assert last_response.text == _ANOTHER_BODY
         assert last_response.status_code == 2
@@ -63,7 +63,7 @@ class HttpMockerTest(TestCase):
             HttpRequest(_A_URL, _SOME_QUERY_PARAMS, _SOME_HEADERS),
             _A_RESPONSE,
         )
-        requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS)
+        requests.get(_A_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS, timeout=60)
 
     def test_given_missing_requests_when_decorate_then_raise(self):
         @HttpMocker()
@@ -84,7 +84,7 @@ class HttpMockerTest(TestCase):
                 HttpRequest(_A_URL),
                 _A_RESPONSE,
             )
-            requests.get(_A_URL)
+            requests.get(_A_URL, timeout=60)
             assert False
 
         with pytest.raises(AssertionError):
@@ -110,7 +110,7 @@ class HttpMockerTest(TestCase):
                 HttpRequest(_A_URL),
                 _A_RESPONSE,
             )
-            requests.get(_ANOTHER_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS)
+            requests.get(_ANOTHER_URL, params=_SOME_QUERY_PARAMS, headers=_SOME_HEADERS, timeout=60)
 
         with pytest.raises(ValueError) as exc_info:
             decorated_function()
@@ -130,7 +130,7 @@ class HttpMockerTest(TestCase):
                 HttpRequest(_A_URL, headers=less_granular_headers),
                 _A_RESPONSE,
             )
-            requests.get(_A_URL, headers=more_granular_headers)
+            requests.get(_A_URL, headers=more_granular_headers, timeout=60)
 
         with pytest.raises(ValueError) as exc_info:
             decorated_function()
@@ -142,8 +142,8 @@ class HttpMockerTest(TestCase):
             request = HttpRequest(_A_URL)
             http_mocker.get(request, _A_RESPONSE)
 
-            requests.get(_A_URL)
-            requests.get(_A_URL)
+            requests.get(_A_URL, timeout=60)
+            requests.get(_A_URL, timeout=60)
 
             http_mocker.assert_number_of_calls(request, 2)
 
@@ -156,8 +156,8 @@ class HttpMockerTest(TestCase):
             request = HttpRequest(_A_URL)
             http_mocker.get(request, _A_RESPONSE)
 
-            requests.get(_A_URL)
-            requests.get(_A_URL)
+            requests.get(_A_URL, timeout=60)
+            requests.get(_A_URL, timeout=60)
 
             http_mocker.assert_number_of_calls(request, 1)
 

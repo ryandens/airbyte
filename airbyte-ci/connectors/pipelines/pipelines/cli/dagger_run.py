@@ -45,7 +45,7 @@ def get_current_dagger_sdk_version() -> str:
 def install_dagger_cli(dagger_version: str) -> None:
     install_script_path = "/tmp/install_dagger.sh"
     with open(install_script_path, "w") as f:
-        response = requests.get("https://dl.dagger.io/dagger/install.sh")
+        response = requests.get("https://dl.dagger.io/dagger/install.sh", timeout=60)
         response.raise_for_status()
         f.write(response.text)
     subprocess.run(["chmod", "+x", install_script_path], check=True)

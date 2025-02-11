@@ -50,13 +50,13 @@ class TestBases:
     def test_backoff_time(self, http_status, expected_backoff_time, requests_mock):
         url = "https://api.airtable.com/v0/meta/bases/"
         requests_mock.get(url, status_code=http_status, json={})
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert self.bases_instance.backoff_time(response) == expected_backoff_time
 
     def test_next_page(self, requests_mock):
         url = "https://api.airtable.com/v0/meta/bases/"
         requests_mock.get(url, status_code=200, json={"offset": "xyz"})
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert self.bases_instance.next_page_token(response) == "xyz"
 
     @pytest.mark.parametrize(
@@ -72,7 +72,7 @@ class TestBases:
     def test_parse_response(self, fake_bases_response, expected_bases_response, requests_mock):
         url = "https://api.airtable.com/v0/meta/bases/"
         requests_mock.get(url, status_code=200, json=fake_bases_response)
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert list(self.bases_instance.parse_response(response)) == expected_bases_response
 
 
@@ -133,7 +133,7 @@ class TestAirtableStream:
     def test_streams_backoff_time(self, http_status, expected_backoff_time, prepared_stream, requests_mock):
         url = "https://api.airtable.com/v0/meta/bases/"
         requests_mock.get(url, status_code=http_status, json={})
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert self.stream_instance(prepared_stream).backoff_time(response) == expected_backoff_time
 
     def test_streams_get_json_schema(self, prepared_stream):
@@ -142,7 +142,7 @@ class TestAirtableStream:
     def test_streams_next_page(self, prepared_stream, requests_mock):
         url = "https://api.airtable.com/v0/meta/bases/"
         requests_mock.get(url, status_code=200, json={"offset": "xyz"})
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert self.stream_instance(prepared_stream).next_page_token(response) == "xyz"
 
     @pytest.mark.parametrize(
@@ -159,5 +159,5 @@ class TestAirtableStream:
         stream = self.stream_instance(prepared_stream)
         url = f"{stream.url_base}/{stream.path()}"
         requests_mock.get(url, status_code=200, json=streams_json_response)
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         assert list(stream.parse_response(response)) == streams_processed_response

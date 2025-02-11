@@ -24,7 +24,7 @@ logger = logging.getLogger("airbyte")
 def fetch_thumbnail_data_url(url: str) -> Optional[str]:
     """Request thumbnail image and return it embedded into the data-link"""
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         if response.status_code == requests.status_codes.codes.OK:
             _type = response.headers["content-type"]
             data = base64.b64encode(response.content)
